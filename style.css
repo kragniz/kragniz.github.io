@@ -5,10 +5,10 @@
     
 html { 
     background: url(lpt_gliph.svg) no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+    -webkit-background-size: 100em;
+    -moz-background-size: 100em;
+    -o-background-size: 100em;
+    background-size: 100em;
 }
         
 #page-wrap {
