@@ -74,10 +74,24 @@ vagalume.player.Stop()
 &lt;p&gt;take a look at the source
 (&lt;a class="reference external" href="http://gitorious.org/vagalume/vagalume/blobs/master/src/dbus.h"&gt;http://gitorious.org/vagalume/vagalume/blobs/master/src/dbus.h&lt;/a&gt;) for all of the
 functions available&lt;/p&gt;
-</summary><category term="DBus"></category><category term="open source"></category><category term="programing"></category><category term="python"></category><category term="vagalume"></category></entry><entry><title>Grabbing screenshots as a Python Image Library Image type</title><link href="http://blog.kragniz.eu/screenshots-with-python-image-library" rel="alternate"></link><updated>2010-05-26T18:09:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2010-05-26:screenshots-with-python-image-library</id><summary type="html">&lt;p&gt;I needed to capture my screen very quickly from python, and needed to
-save these images into a Python Image Library (PIL) Image. I wrote a
-small python class to do the work, keeping as little processing as
-possible in the &lt;tt class="docutils literal"&gt;screenshot.take()&lt;/tt&gt; function.&lt;/p&gt;
+</summary><category term="DBus"></category><category term="open source"></category><category term="programing"></category><category term="python"></category><category term="vagalume"></category></entry><entry><title>Grabbing screenshots as a Python Image Library Image type</title><link href="http://blog.kragniz.eu/screenshots-with-python-image-library" rel="alternate"></link><updated>2010-05-26T18:09:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2010-05-26:screenshots-with-python-image-library</id><summary type="html">&lt;p&gt;A couple of days ago I needed to take screenshots of my linux desktop's screen and
+manipulate these captured images using Python Image Library (PIL). I wrote a
+small python class to do the work of taking the screenshot and returning a PIL
+&lt;tt class="docutils literal"&gt;Image&lt;/tt&gt; object for use in the rest of the system I was writing.&lt;/p&gt;
+&lt;p&gt;The code ended up being simpler than I expected, mostly because &lt;a class="reference external" href="http://en.wikipedia.org/wiki/GDK"&gt;GDK&lt;/a&gt;, the library used as an intermediary
+between GTK and the low-level window manager and display server commands, does
+all the heavy lifting.&lt;/p&gt;
+&lt;div class="section" id="method"&gt;
+&lt;h2&gt;Method&lt;/h2&gt;
+&lt;p&gt;I wanted to take many screenshots during a run of the program I was writing, so
+allocated a persistent &lt;tt class="docutils literal"&gt;gtk.gdk.Pixbuf&lt;/tt&gt; object to store the captured image
+in. This object has a handy &lt;tt class="docutils literal"&gt;get_from_drawable&lt;/tt&gt; method. Of course, the X11
+root window is a drawable, so by using &lt;tt class="docutils literal"&gt;gtk.gdk.get_default_root_window()&lt;/tt&gt; we
+can copy each pixel into our buffer.&lt;/p&gt;
+&lt;p&gt;Once the &lt;tt class="docutils literal"&gt;Pixbuf&lt;/tt&gt; is full, an &lt;tt class="docutils literal"&gt;Image&lt;/tt&gt; needs to be created from it, since
+that was the original aim. Luckily, there's &lt;tt class="docutils literal"&gt;Image.frombuffer&lt;/tt&gt; to do all the
+hard work when combined with &lt;tt class="docutils literal"&gt;Pixbuf.get_pixels()&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;Full code:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;Image&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nn"&gt;gtk&lt;/span&gt;
 
 &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Screenshotter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;object&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
@@ -90,7 +104,8 @@ possible in the &lt;tt class="docutils literal"&gt;screenshot.take()&lt;/tt&gt; 
             &lt;span class="bp"&gt;False&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
             &lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
             &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;img_width&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;img_height&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;img_height&lt;/span&gt;
+        &lt;span class="p"&gt;)&lt;/span&gt;
 
     &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;take&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
         &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;screengrab&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_from_drawable&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
@@ -114,12 +129,8 @@ possible in the &lt;tt class="docutils literal"&gt;screenshot.take()&lt;/tt&gt; 
         &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;final_screengrab&lt;/span&gt;
 
 &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-    &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;time&lt;/span&gt;
-    &lt;span class="n"&gt;screenshot&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;screenshot&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-    &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-        &lt;span class="n"&gt;ti&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-        &lt;span class="n"&gt;im&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;screenshot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;take&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-        &lt;span class="n"&gt;tii&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-        &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;tii&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;ti&lt;/span&gt;
+    &lt;span class="n"&gt;screenshot&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Screenshotter&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;image&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;screenshot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;take&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-</summary></entry></feed>
+&lt;/div&gt;
+</summary><category term="programing"></category><category term="python"></category><category term="python image library"></category></entry></feed>
