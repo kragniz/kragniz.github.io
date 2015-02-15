@@ -20,7 +20,7 @@
 
   <title>
     blog.kragniz.eu
-  </title>
+&ndash; Tag: GPLv3  </title>
 
 <script type="text/javascript">
   var _gaq = _gaq || [];
@@ -52,19 +52,32 @@
 
   <main>
 
-<h1>Archives for 2010</h1>
+<article>
+  <div class="article_title">
+    <h3><a href="http://blog.kragniz.eu/taylortype">LaTeX in your system tray</a></h3>
+  </div>
+  <div class="article_text">
+    <p>Whilst procrastinating on writing GCSE physics coursework, I thought it would
+be neat to have LaTeX run in the background and notify you when the document
+you're working on contains errors.</p>
+<img alt="" src="http://blog.kragniz.eu/images/taylortype0.png" />
+<p>I wrote a python application which puts a small icon in the system tray. You
+can configure it to compile a LaTeX document.</p>
+<p>It has a couple of settings for things like input file, output directory and
+automatic PDF opening (useful with evince, since opening refreshes the file if
+it is currently open in an existing evince window).  It supports simple error
+messages for both LaTeX and BibTeX.</p>
+<img alt="" src="http://blog.kragniz.eu/images/taylortype1.png" />
+<p>It uses GTK for the system tray icon, and libnotify to display the error
+message notifications.</p>
+<p>The project is on launchpad here: <a class="reference external" href="https://launchpad.net/taylortype">https://launchpad.net/taylortype</a></p>
+<p>There's a small site on sourceforge: <a class="reference external" href="http://taylortype.sourceforge.net/">http://taylortype.sourceforge.net/</a></p>
 
-<dl>
-    <dt>Tue 01 June 2010</dt>
-    <dd><a href="http://blog.kragniz.eu/control-vagalume-from-python">Controlling vagalume last.fm client using python</a></dd>
-    <dt>Wed 26 May 2010</dt>
-    <dd><a href="http://blog.kragniz.eu/screenshots-with-python-image-library">Grabbing screenshots as a Python Image Library <tt class="docutils literal">Image</tt> type</a></dd>
-    <dt>Mon 05 April 2010</dt>
-    <dd><a href="http://blog.kragniz.eu/taylortype">LaTeX in your system tray</a></dd>
-    <dt>Sun 04 April 2010</dt>
-    <dd><a href="http://blog.kragniz.eu/green-blue-thing">Green/blue thing</a></dd>
-</dl>
+  </div>
+</article>
 
+<footer>
+</footer>
 
     <div id="ending_message">
       <p>&copy; Louis Taylor. <a href="http://blog.kragniz.eu">Index</a> &brvbar; <a href="http://blog.kragniz.eu/archives.html">Archives</a> &brvbar; <a href="http://getpelican.com" target="_blank">Pelican</a> &brvbar; <a href="https://github.com/gfidente/pelican-svbhack" target="_blank">Theme</a>.</p>

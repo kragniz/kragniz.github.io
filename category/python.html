@@ -120,16 +120,15 @@ new song or stopping the current one and runs either <tt class="docutils literal
         <span class="k">print</span> <span class="s">&#39;now playing &quot;</span><span class="si">%s</span><span class="s">&quot; by </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">artist</span><span class="p">)</span>
 </pre></div>
 <p>To interact with vagalume do something like:</p>
-<pre class="literal-block">
-vagalume = Vagalume()
+<div class="highlight"><pre><span class="n">vagalume</span> <span class="o">=</span> <span class="n">Vagalume</span><span class="p">()</span>
 
-#do anything you want with dbus.
-vagalume.player.Play()
-vagalume.player.Skip()
-vagalume.player.LoveTrack()
-vagalume.player.BanTrack()
-vagalume.player.Stop()
-</pre>
+<span class="c"># do anything you want with dbus</span>
+<span class="n">vagalume</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">Play</span><span class="p">()</span>
+<span class="n">vagalume</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">Skip</span><span class="p">()</span>
+<span class="n">vagalume</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">LoveTrack</span><span class="p">()</span>
+<span class="n">vagalume</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">BanTrack</span><span class="p">()</span>
+<span class="n">vagalume</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">Stop</span><span class="p">()</span>
+</pre></div>
 <p>take a look at the source
 (<a class="reference external" href="http://gitorious.org/vagalume/vagalume/blobs/master/src/dbus.h">http://gitorious.org/vagalume/vagalume/blobs/master/src/dbus.h</a>) for all of the
 functions available</p>

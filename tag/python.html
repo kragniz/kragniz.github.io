@@ -119,16 +119,15 @@ new song or stopping the current one and runs either <tt class="docutils literal
         <span class="k">print</span> <span class="s">&#39;now playing &quot;</span><span class="si">%s</span><span class="s">&quot; by </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">artist</span><span class="p">)</span>
 </pre></div>
 <p>To interact with vagalume do something like:</p>
-<pre class="literal-block">
-vagalume = Vagalume()
+<div class="highlight"><pre><span class="n">vagalume</span> <span class="o">=</span> <span class="n">Vagalume</span><span class="p">()</span>
 
-#do anything you want with dbus.
-vagalume.player.Play()
-vagalume.player.Skip()
-vagalume.player.LoveTrack()
-vagalume.player.BanTrack()
-vagalume.player.Stop()
-</pre>
+<span class="c"># do anything you want with dbus</span>
+<span class="n">vagalume</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">Play</span><span class="p">()</span>
+<span class="n">vagalume</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">Skip</span><span class="p">()</span>
+<span class="n">vagalume</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">LoveTrack</span><span class="p">()</span>
+<span class="n">vagalume</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">BanTrack</span><span class="p">()</span>
+<span class="n">vagalume</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">Stop</span><span class="p">()</span>
+</pre></div>
 <p>take a look at the source
 (<a class="reference external" href="http://gitorious.org/vagalume/vagalume/blobs/master/src/dbus.h">http://gitorious.org/vagalume/vagalume/blobs/master/src/dbus.h</a>) for all of the
 functions available</p>
@@ -200,6 +199,30 @@ hard work when combined with <tt class="docutils literal">Pixbuf.get_pixels()</t
     <span class="n">image</span> <span class="o">=</span> <span class="n">screenshot</span><span class="o">.</span><span class="n">take</span><span class="p">()</span>
 </pre></div>
 </div>
+
+  </div>
+</article>
+<hr />
+<article>
+  <div class="article_title">
+    <h3><a href="http://blog.kragniz.eu/taylortype">LaTeX in your system tray</a></h3>
+  </div>
+  <div class="article_text">
+    <p>Whilst procrastinating on writing GCSE physics coursework, I thought it would
+be neat to have LaTeX run in the background and notify you when the document
+you're working on contains errors.</p>
+<img alt="" src="http://blog.kragniz.eu/images/taylortype0.png" />
+<p>I wrote a python application which puts a small icon in the system tray. You
+can configure it to compile a LaTeX document.</p>
+<p>It has a couple of settings for things like input file, output directory and
+automatic PDF opening (useful with evince, since opening refreshes the file if
+it is currently open in an existing evince window).  It supports simple error
+messages for both LaTeX and BibTeX.</p>
+<img alt="" src="http://blog.kragniz.eu/images/taylortype1.png" />
+<p>It uses GTK for the system tray icon, and libnotify to display the error
+message notifications.</p>
+<p>The project is on launchpad here: <a class="reference external" href="https://launchpad.net/taylortype">https://launchpad.net/taylortype</a></p>
+<p>There's a small site on sourceforge: <a class="reference external" href="http://taylortype.sourceforge.net/">http://taylortype.sourceforge.net/</a></p>
 
   </div>
 </article>

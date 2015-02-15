@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>blog.kragniz.eu</title><link href="http://blog.kragniz.eu/" rel="alternate"></link><link href="http://blog.kragniz.eu/feeds/3d.atom.xml" rel="self"></link><id>http://blog.kragniz.eu/</id><updated>2010-04-04T21:24:00+00:00</updated><entry><title>Green/blue thing</title><link href="http://blog.kragniz.eu/green-blue-thing" rel="alternate"></link><updated>2010-04-04T21:24:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2010-04-04:green-blue-thing</id><summary type="html">&lt;iframe
+src="//player.vimeo.com/video/9220323?loop=1&amp;title=0&amp;byline=0&amp;portrait=0"
+width="676" height="500" frameborder="0" webkitallowfullscreen
+mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;</summary><category term="3d"></category><category term="blender"></category><category term="images"></category></entry><entry><title>Some fur</title><link href="http://blog.kragniz.eu/some-fur" rel="alternate"></link><updated>2009-11-30T18:14:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2009-11-30:some-fur</id><summary type="html">&lt;p&gt;Playing with fluffy things in blender.&lt;/p&gt;
+&lt;img alt="" src="http://blog.kragniz.eu/images/large-brute-beast-pic34.jpg" /&gt;
+&lt;img alt="" src="http://blog.kragniz.eu/images/large-brute-beast-pic35.jpg" /&gt;
+&lt;img alt="" src="http://blog.kragniz.eu/images/smallhairythingshot43.jpg" /&gt;
+&lt;img alt="" src="http://blog.kragniz.eu/images/smallhairythingshot53.jpg" /&gt;
+</summary><category term="3d"></category><category term="blender"></category><category term="images"></category></entry><entry><title>Low altitude flying craft</title><link href="http://blog.kragniz.eu/flying-thing" rel="alternate"></link><updated>2009-04-02T14:46:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2009-04-02:flying-thing</id><summary type="html">&lt;img alt="" src="http://blog.kragniz.eu/images/rocket-thing-pic-10.jpg" /&gt;
+&lt;img alt="" src="http://blog.kragniz.eu/images/rocket-thing-pic-16.jpg" /&gt;
+&lt;img alt="" src="http://blog.kragniz.eu/images/rocket-thing-pic-19.jpg" /&gt;
+&lt;iframe
+src="//player.vimeo.com/video/9167617?loop=1&amp;title=0&amp;byline=0&amp;portrait=0"
+width="627" height="400" frameborder="0" webkitallowfullscreen
+mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;</summary><category term="3d"></category><category term="blender"></category><category term="images"></category></entry><entry><title>Hoop machine</title><link href="http://blog.kragniz.eu/hoop-machine" rel="alternate"></link><updated>2009-01-28T22:04:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2009-01-28:hoop-machine</id><summary type="html">&lt;p&gt;Modeled in &lt;a class="reference external" href="http://www.blender.org/"&gt;Blender&lt;/a&gt; and rendered in &lt;a class="reference external" href="www.kerkythea.net"&gt;Kerkythea&lt;/a&gt;.&lt;/p&gt;
+&lt;img alt="" src="http://blog.kragniz.eu/images/hoopmachine6.jpg" /&gt;
+</summary><category term="3d"></category><category term="blender"></category><category term="images"></category></entry></feed>
