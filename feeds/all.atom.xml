@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>blog.kragniz.eu</title><link href="https://blog.kragniz.eu/" rel="alternate"></link><link href="https://blog.kragniz.eu/feeds/all.atom.xml" rel="self"></link><id>https://blog.kragniz.eu/</id><updated>2015-02-09T00:31:00+00:00</updated><entry><title>Starting with Pelican</title><link href="https://blog.kragniz.eu/starting-with-pelican" rel="alternate"></link><updated>2015-02-09T00:31:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2015-02-09:starting-with-pelican</id><summary type="html">&lt;div class="section" id="introduction"&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>blog.kragniz.eu</title><link href="http://blog.kragniz.eu/" rel="alternate"></link><link href="http://blog.kragniz.eu/feeds/all.atom.xml" rel="self"></link><id>http://blog.kragniz.eu/</id><updated>2015-02-09T00:31:00+00:00</updated><entry><title>Starting with Pelican</title><link href="http://blog.kragniz.eu/starting-with-pelican" rel="alternate"></link><updated>2015-02-09T00:31:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2015-02-09:starting-with-pelican</id><summary type="html">&lt;div class="section" id="introduction"&gt;
 &lt;h2&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;This is my first rst post!&lt;/p&gt;
 &lt;p&gt;And this is a link to my github &lt;a class="reference external" href="https://github.com/kragniz"&gt;profile&lt;/a&gt;&lt;/p&gt;
@@ -12,7 +12,7 @@ $ hello there, everyone
 &lt;/pre&gt;
 &lt;p&gt;Looks cool, right?&lt;/p&gt;
 &lt;/div&gt;
-</summary><category term="python"></category><category term="blog"></category><category term="rst"></category></entry><entry><title>Controlling vagalume last.fm client using python</title><link href="https://blog.kragniz.eu/control-vagalume-from-python" rel="alternate"></link><updated>2010-06-01T18:09:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2010-06-01:control-vagalume-from-python</id><summary type="html">&lt;p&gt;I've recently been playing with the docky python bindings, and started by
+</summary><category term="python"></category><category term="blog"></category><category term="rst"></category></entry><entry><title>Controlling vagalume last.fm client using python</title><link href="http://blog.kragniz.eu/control-vagalume-from-python" rel="alternate"></link><updated>2010-06-01T18:09:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2010-06-01:control-vagalume-from-python</id><summary type="html">&lt;p&gt;I've recently been playing with the docky python bindings, and started by
 writing a helper to interact with &lt;a class="reference external" href="http://vagalume.igalia.com/"&gt;Vagalume&lt;/a&gt;, a
 lightweight last.fm client (I later added it to &lt;a class="reference external" href="https://launchpad.net/vagalume-docky"&gt;a project on launchpad&lt;/a&gt;). The vagalume DBus methods and
 signals are mostly undocumented, but they can be found lurking around after a
@@ -87,7 +87,7 @@ vagalume.player.Stop()
 &lt;p&gt;take a look at the source
 (&lt;a class="reference external" href="http://gitorious.org/vagalume/vagalume/blobs/master/src/dbus.h"&gt;http://gitorious.org/vagalume/vagalume/blobs/master/src/dbus.h&lt;/a&gt;) for all of the
 functions available&lt;/p&gt;
-</summary><category term="DBus"></category><category term="open source"></category><category term="programing"></category><category term="python"></category><category term="vagalume"></category></entry><entry><title>Grabbing screenshots as a Python Image Library Image type</title><link href="https://blog.kragniz.eu/screenshots-with-python-image-library" rel="alternate"></link><updated>2010-05-26T18:09:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2010-05-26:screenshots-with-python-image-library</id><summary type="html">&lt;p&gt;I needed to capture my screen very quickly from python, and needed to
+</summary><category term="DBus"></category><category term="open source"></category><category term="programing"></category><category term="python"></category><category term="vagalume"></category></entry><entry><title>Grabbing screenshots as a Python Image Library Image type</title><link href="http://blog.kragniz.eu/screenshots-with-python-image-library" rel="alternate"></link><updated>2010-05-26T18:09:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2010-05-26:screenshots-with-python-image-library</id><summary type="html">&lt;p&gt;I needed to capture my screen very quickly from python, and needed to
 save these images into a Python Image Library (PIL) Image. I wrote a
 small python class to do the work, keeping as little processing as
 possible in the &lt;tt class="docutils literal"&gt;screenshot.take()&lt;/tt&gt; function.&lt;/p&gt;
