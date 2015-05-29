@@ -16,10 +16,11 @@
   <meta name="description" content="Posts and writings by Louis Taylor">
 
 
+<meta name="keywords" content="fedora, vagrant, libvirt">
 
   <title>
     blog.kragniz.eu
-&ndash; Category: 3d  </title>
+&ndash; Vagrant on fedora 21 and later  </title>
 
 <script type="text/javascript">
   var _gaq = _gaq || [];
@@ -53,58 +54,50 @@
 
 <article>
   <div class="article_title">
-    <h3><a href="../green-blue-thing">Green/blue thing</a></h3>
+    <h3><a href="../vagrant-fedora-21">Vagrant on fedora 21 and later</a></h3>
   </div>
   <div class="article_text">
-    <iframe
-src="//player.vimeo.com/video/9220323?loop=1&title=0&byline=0&portrait=0"
-width="676" height="500" frameborder="0" webkitallowfullscreen
-mozallowfullscreen allowfullscreen></iframe>
-  </div>
-</article>
-<hr />
-<article>
-  <div class="article_title">
-    <h3><a href="../some-fur">Some fur</a></h3>
-  </div>
-  <div class="article_text">
-    <p>Playing with fluffy things in blender.</p>
-<img alt="" src="../images/large-brute-beast-pic34.jpg" />
-<img alt="" src="../images/large-brute-beast-pic35.jpg" />
-<img alt="" src="../images/smallhairythingshot43.jpg" />
-<img alt="" src="../images/smallhairythingshot53.jpg" />
+    <p>Vagrant is <a class="reference external" href="https://bugzilla.redhat.com/show_bug.cgi?id=1020456">now packaged</a> in Fedora 21 and later versions, which is great news.
+No more messing around with the horror of rvm!</p>
+<p>After installing vagrant and the libvirt plugin with yum:</p>
+<pre class="literal-block">
+$ sudo yum install vagrant vagrant-libvirt
+</pre>
+<p>I got some syntax errors from Vagrant:</p>
+<pre class="literal-block">
+$ vagrant up
+/usr/share/vagrant/lib/vagrant/pre-rubygems.rb:19:in `require_relative': /usr/share/vagrant/lib/vagrant/bundler.rb:217: syntax error, unexpected tPOW (SyntaxError)
+    def internal_install(plugins, update, **extra)
+                                            ^
+/usr/share/vagrant/lib/vagrant/bundler.rb:298: class definition in method body
+/usr/share/vagrant/lib/vagrant/bundler.rb:315: class definition in method body
+/usr/share/vagrant/lib/vagrant/bundler.rb:368: syntax error, unexpected keyword_end, expecting $end
+    from /usr/share/vagrant/lib/vagrant/pre-rubygems.rb:19:in `&lt;main&gt;'
+</pre>
+<p>This was caused by rvm having an old version of ruby installed, which is what
+was installed when I installed vagrant on this machine initially:</p>
+<pre class="literal-block">
+$ ruby --version
+ruby 1.9.3p545 (2014-02-24 revision 45159) [x86_64-linux]
+</pre>
+<p>Luckily you can just:</p>
+<pre class="literal-block">
+$ rvm implode
+</pre>
+<p>and everything will be happy, where happy is defined by vagrant running and
+having the fewest versions of ruby installed.</p>
 
   </div>
-</article>
-<hr />
-<article>
-  <div class="article_title">
-    <h3><a href="../flying-thing">Low altitude flying craft</a></h3>
+  <div class="article_meta">
+    <p>Posted on: Sun 10 May 2015</p>
+    <p>Category: <a href="../category/fedora.html">fedora</a>
+ &ndash; Tags:
+      <a href="../tag/fedora.html">fedora</a>,      <a href="../tag/vagrant.html">vagrant</a>,      <a href="../tag/libvirt.html">libvirt</a>    </p>
   </div>
-  <div class="article_text">
-    <img alt="" src="../images/rocket-thing-pic-10.jpg" />
-<img alt="" src="../images/rocket-thing-pic-16.jpg" />
-<img alt="" src="../images/rocket-thing-pic-19.jpg" />
-<iframe
-src="//player.vimeo.com/video/9167617?loop=1&title=0&byline=0&portrait=0"
-width="627" height="400" frameborder="0" webkitallowfullscreen
-mozallowfullscreen allowfullscreen></iframe>
-  </div>
-</article>
-<hr />
-<article>
-  <div class="article_title">
-    <h3><a href="../hoop-machine">Hoop machine</a></h3>
-  </div>
-  <div class="article_text">
-    <p>Modeled in <a class="reference external" href="http://www.blender.org/">Blender</a> and rendered in <a class="reference external" href="www.kerkythea.net">Kerkythea</a>.</p>
-<img alt="" src="../images/hoopmachine6.jpg" />
 
-  </div>
+
 </article>
 
-<footer>
-</footer>
 
     <div id="ending_message">
       <p>&copy; Louis Taylor. <a href="..">Index</a> &brvbar; <a href="../archives.html">Archives</a> &brvbar; <a href="http://getpelican.com" target="_blank">Pelican</a> &brvbar; <a href="https://github.com/gfidente/pelican-svbhack" target="_blank">Theme</a>.</p>
