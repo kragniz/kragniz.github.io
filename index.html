@@ -53,6 +53,121 @@
 
 <article>
   <div class="article_title">
+    <h3><a href="./kpatch-package-builder">kpatch-package-builder 0.1.0</a></h3>
+  </div>
+  <div class="article_text">
+    <p>As part of <a class="reference external" href="https://developers.google.com/open-source/gsoc/">Google Summer of Code</a>, I've been working with the
+CentOS project to create a delivery and build system to provide easy and
+automatic delivery of patches to a running linux kernel. CentOS 7 currently has
+support for live patching a running kernel (via the kpatch kernel module and
+the surrounding userland tools), but crafting a patch and applying it is a
+currently a very manual process. The overall aim of the project is to make
+applying kernel fixes an easy and automatic process, which will make it easier
+to keep a CentOS installation more secure by without having to schedule
+downtime.</p>
+<p>As the first part of this project, I've been writing
+<tt class="docutils literal"><span class="pre">kpatch-package-builder</span></tt>, a tool which generates RPM packages containing a
+kernel module which patchs the currently running kernel.  These distributable
+packages contain a single kernel patch, so standard package management tools,
+such as dnf and yum can install and manage them.</p>
+<p>This first version is pretty simple. You create a patch against the source of the
+kernel you want to modify, then run <tt class="docutils literal"><span class="pre">kpatch-package-builder</span></tt> with the patch
+name as the last argument. The output can either be a built .rpm file, or the
+raw spec.</p>
+<p>By default <tt class="docutils literal"><span class="pre">kpatch-package-builder</span></tt> outputs an RPM .spec file, which can be
+used to build the RPM. This is a very simple spec, which just specifies the
+name of the package, description, and other common package metadata. The name
+of the package currently is based off the patch filename with a prefix of
+<tt class="docutils literal"><span class="pre">kpatch-module-</span></tt>, which allows these packages to be simply distinguished.
+Future versions will have a series of virtual dependencies to prevent patch
+collisions, but that's something for a future post.</p>
+<p>When given the <tt class="docutils literal"><span class="pre">-b</span></tt> or <tt class="docutils literal"><span class="pre">--build-rpm</span></tt> option, <tt class="docutils literal"><span class="pre">kpatch-package-builder</span></tt>
+will invoke rpmbuild and build the package in place. The makes the kernel patch
+to distributable package a single step.</p>
+<p>As an example, creating a package from a patch file:</p>
+<pre class="code bash literal-block">
+<span class="o">[</span>vagrant&#64;localhost ~<span class="o">]</span><span class="nv">$ </span>kpatch-package-builder -b livepatch-test.patch
+kpatch-package-builder: generating spec file...
+kpatch-package-builder: building RPM...
+kpatch-package-builder: writing spec file to /tmp/kpatch_3I6mHJ.spec...
+kpatch-package-builder: writing kpatch-module-livepatch-test-1-1.x86_64.rpm...
+</pre>
+<p>The default metadata associated with that generated package:</p>
+<pre class="code bash literal-block">
+<span class="o">[</span>vagrant&#64;localhost ~<span class="o">]</span><span class="nv">$ </span>rpm -qip kpatch-module-livepatch-test-1-1.x86_64.rpm
+Name        : kpatch-module-livepatch-test
+Version     : 1
+Release     : 1
+Architecture: x86_64
+Install Date: <span class="o">(</span>not installed<span class="o">)</span>
+Group       : System Environment/Kernel
+Size        : 281661
+License     : GPLv2
+Signature   : <span class="o">(</span>none<span class="o">)</span>
+Source RPM  : kpatch-module-livepatch-test-1-1.src.rpm
+Build Date  : Wed 24 Jun 2015 15:26:46 EDT
+Build Host  : localhost
+Relocations : <span class="o">(</span>not relocatable<span class="o">)</span>
+Summary     : kpatch livepatch module
+Description :
+Package generated from livepatch-test.patch by kpatch-package-builder
+</pre>
+<p>The contents of the package:</p>
+<pre class="code bash literal-block">
+<span class="o">[</span>vagrant&#64;localhost ~<span class="o">]</span><span class="nv">$ </span>rpm -qlp kpatch-module-livepatch-test-1-1.x86_64.rpm
+/var/lib/kpatch/3.10.0-229.el7.x86_64/kpatch-livepatch-test.ko
+</pre>
+<p>The current options available:</p>
+<pre class="code bash literal-block">
+<span class="o">[</span>vagrant&#64;localhost ~<span class="o">]</span><span class="nv">$ </span>kpatch-package-builder -h
+usage: kpatch-package-builder <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-v<span class="o">]</span> <span class="o">[</span>-o FILE | -b<span class="o">]</span> <span class="o">[</span>-k VERSION<span class="o">]</span> <span class="o">[</span>-a ARCH<span class="o">]</span>
+                              <span class="o">[</span>--set-release NUM<span class="o">]</span> <span class="o">[</span>--set-version NUM<span class="o">]</span> <span class="o">[</span>-d<span class="o">]</span>
+                              PATCH
+
+Build an RPM package or an RPM spec file to install and manage a kpatch
+livepatch module.
+
+positional arguments:
+  PATCH                 patch file from which to build the livepatch module
+
+optional arguments:
+  -h, --help            show this <span class="nb">help </span>message and <span class="nb">exit</span>
+  -v, --version         show program<span class="err">'</span>s version number and <span class="nb">exit</span>
+  -o FILE, --output FILE
+                        name of output spec file
+  -b, --build-rpm       build an RPM package
+  -k VERSION, --kernel VERSION
+                        target kernel version to build the livepatch module
+                        against. Defaults to the currently running version
+  -a ARCH, --arch ARCH  architecture to compile the patch against
+  --set-release NUM     package release version
+  --set-version NUM     package version number
+  -d, --debug           print debug information
+
+Usage examples:
+
+Build an RPM package <span class="k">for </span>a given patch:
+
+    <span class="nv">$ </span>kpatch-package-builder --build-rpm module.patch
+
+Generate a spec file to later build into an RPM:
+
+    <span class="nv">$ </span>kpatch-package-builder --output module.spec module.patch
+</pre>
+<p>If you want to test this or use it yourself, the code lives at <a class="reference external" href="https://github.com/centos-livepatching/kpatch-package-builder">https://github.com/centos-livepatching/kpatch-package-builder</a>.</p>
+<div class="section" id="future-work">
+<h2>Future work</h2>
+<p>Next up is the rest of the tooling to make building and distributing a series
+of patches across a set of kernel versions easy. This will be working on top of
+the basic kpatch-package-builder functionality to allow building many versions
+of packages for particular kernels.</p>
+</div>
+
+  </div>
+</article>
+<hr />
+<article>
+  <div class="article_title">
     <h3><a href="./vagrant-fedora-21">Vagrant on fedora 21 and later</a></h3>
   </div>
   <div class="article_text">
@@ -99,6 +214,7 @@ through university.</p>
 <p>Some sailing robots made with friends from my university:</p>
 <img alt="" src="./images/dewi.jpg" />
 <img alt="" src="./images/kitty.jpg" />
+<p>Old posts begin here:</p>
 
   </div>
 </article>
