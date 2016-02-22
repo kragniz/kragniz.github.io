@@ -59,7 +59,7 @@
   <div class="article_text">
     <p>For abersailbot, I've been working on automation of provisioning images to run
 on the main raspberry pi inside the boat. In the past, this has been a
-primitive bash script that installs packages and configurations files with a
+primitive bash script which installs packages and configurations files with a
 dubious amount of calls out to apt, cp and sed. Wanting to make this a little
 more sophisticated, I started writing a set of ansible playbooks.</p>
 <p>For testing other repositories, I normally always use
@@ -80,7 +80,7 @@ like to do the same, the steps I took are fairly simple:</p>
 Pi site need some small modifications to run under QEMU, so we need to mount
 and edit it. I'm using the <tt class="docutils literal"><span class="pre">2015-11-21-raspbian-jessie-lite.img</span></tt> image from
 <a class="reference external" href="https://www.raspberrypi.org/downloads/raspbian/">https://www.raspberrypi.org/downloads/raspbian/</a>.</p>
-<p>This image contains two partitions, a small boot partition (FAT) that contains
+<p>This image contains two partitions, a small boot partition (FAT) which contains
 a few config files and a kernel, and the main ext4 root partition. The latter
 is the partition we're interested in. You can inspect the image with <tt class="docutils literal">fdisk</tt>
 to show these:</p>
@@ -128,7 +128,7 @@ compressed it to save on space:</p>
 <pre class="literal-block">
 $ xz 2015-11-21-raspbian-jessie-lite.img
 </pre>
-<p>Now that we have an image to boot, we need a kernel to run. Sadly, a modified
+<p>Now we have an image to boot, we need a kernel to run. Sadly, a modified
 kernel is required, since QEMU does not support raspberry pi hardware. Luckily
 the work of patching and building has already been done by someone else.
 <a class="reference external" href="https://github.com/polaco1782/raspberry-qemu">https://github.com/polaco1782/raspberry-qemu</a> appears to work well.</p>
@@ -225,8 +225,8 @@ configuration file. A simple version of the config file to start off:</p>
     <span class="o">-</span> <span class="n">sshpass</span> <span class="o">-</span><span class="n">p</span> <span class="n">raspberry</span> <span class="n">ssh</span> <span class="n">localhost</span> <span class="o">-</span><span class="n">o</span> <span class="n">StrictHostKeyChecking</span><span class="o">=</span><span class="n">no</span> <span class="o">-</span><span class="n">p</span> <span class="mi">10022</span> <span class="o">-</span><span class="n">l</span> <span class="n">pi</span> <span class="s">&quot;cat /etc/os-release&quot;</span>
     <span class="c"># whatever you want to test here</span>
 </pre></div>
-<p>You should note that this requires a mirror of the image created in the earlier
-steps. Each CI run will have to download and decompress that image. With Travis
+<p>You should note this requires a mirror of the image created in the earlier
+steps. Each CI run will have to download and decompress the image. With Travis
 Pro, I believe you might be able to do something different and cache it, but I
 didn't investigate this.</p>
 <p>This runs <tt class="docutils literal"><span class="pre">qemu-system-arm</span></tt> in the background. In order to wait until the VM
@@ -259,7 +259,7 @@ SUPPORT_URL=&quot;http://www.raspbian.org/RaspbianForums&quot;
 BUG_REPORT_URL=&quot;http://www.raspbian.org/RaspbianBugs&quot;
 </pre>
 <p>Now you have a little Raspbian VM booted on every commit. Run some ansible or
-puppet against that and you're done. Happy testing!</p>
+puppet against it and you're done. Happy testing!</p>
 
   </div>
   <div class="article_meta">
