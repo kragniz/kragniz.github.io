@@ -53,6 +53,218 @@
 
 <article>
   <div class="article_title">
+    <h3><a href="../raspbian-on-travis-ci">Raspbian on Travis CI</a></h3>
+  </div>
+  <div class="article_text">
+    <p>For abersailbot, I've been working on automation of provisioning images to run
+on the main raspberry pi inside the boat. In the past, this has been a
+primitive bash script that installs packages and configurations files with a
+dubious amount of calls out to apt, cp and sed. Wanting to make this a little
+more sophisticated, I started writing a set of ansible playbooks.</p>
+<p>For testing other repositories, I normally always use
+<a class="reference external" href="https://travis-ci.org">https://travis-ci.org</a>. If you're not familiar, Travis CI offers free CI
+resources for open source repositories. The VMs it boots are all Ubuntu on
+x86_64, however. In order to test things on raspbian, some hacks would be
+needed.</p>
+<p>Options I considered:</p>
+<ol class="arabic simple">
+<li>No testing (no tests? What madness!)</li>
+<li>ARM chroot</li>
+<li>Raspbian fat Docker container</li>
+<li>Raspbian image booted under QEMU</li>
+</ol>
+<p>After some playing around, the QEMU route seemed like the best option. If you'd
+like to do the same, the steps I took are fairly simple:</p>
+<p>First off, we need to get a disk image. The images provided from the Raspberry
+Pi site need some small modifications to run under QEMU, so we need to mount
+and edit it. I'm using the <tt class="docutils literal"><span class="pre">2015-11-21-raspbian-jessie-lite.img</span></tt> image from
+<a class="reference external" href="https://www.raspberrypi.org/downloads/raspbian/">https://www.raspberrypi.org/downloads/raspbian/</a>.</p>
+<p>This image contains two partitions, a small boot partition (FAT) that contains
+a few config files and a kernel, and the main ext4 root partition. The latter
+is the partition we're interested in. You can inspect the image with <tt class="docutils literal">fdisk</tt>
+to show these:</p>
+<pre class="literal-block">
+~/g/dewi (master) $ fdisk -l 2015-11-21-raspbian-jessie-lite.img
+Disk 2015-11-21-raspbian-jessie-lite.img: 1.4 GiB, 1458569216 bytes, 2848768 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0xb3c5e39a
+
+Device                               Boot  Start     End Sectors  Size Id Type
+2015-11-21-raspbian-jessie-lite.img1        8192  131071  122880   60M  c W95 FAT32 (LBA)
+2015-11-21-raspbian-jessie-lite.img2      131072 2848767 2717696  1.3G 83 Linux
+</pre>
+<p>Note the start of the partition we're interested in (131072). This is the
+offset from the start of the image in terms of number of sectors. The sector
+size is 512, so the actual offset in terms of bytes is 131072 × 512 =
+67108864.</p>
+<p>Armed with this knowledge, we can mount the image and edit files on it
+interactively.</p>
+<p>First, create a directory to mount the image:</p>
+<pre class="literal-block">
+$ mkdir raspbian-jessie-mount-point
+</pre>
+<p>then mount the image:</p>
+<pre class="literal-block">
+$ sudo mount -o loop,offset=67108864 2015-11-21-raspbian-jessie-lite.img \
+  raspbian-jessie-mount-point
+</pre>
+<p>Now it's time to comment out a bunch of things.</p>
+<ol class="arabic simple">
+<li>Open <tt class="docutils literal"><span class="pre">raspbian-jessie-mount-point/etc/ld.so.preload</span></tt> in an editor of your
+choice and comment out all lines.</li>
+<li>Do the same and comment out all lines related to <tt class="docutils literal">mmccblk</tt> in
+<tt class="docutils literal"><span class="pre">raspbian-jessie-mount-point/etc/fstab</span></tt></li>
+</ol>
+<p>After these edits have been made, unmount the image:</p>
+<pre class="literal-block">
+$ sudo umount raspbian-jessie-mount-point
+</pre>
+<p>The modified image can now be saved and backed up somewhere. I took a copy and
+compressed it to save on space:</p>
+<pre class="literal-block">
+$ xz 2015-11-21-raspbian-jessie-lite.img
+</pre>
+<p>Now that we have an image to boot, we need a kernel to run. Sadly, a modified
+kernel is required, since QEMU does not support raspberry pi hardware. Luckily
+the work of patching and building has already been done by someone else.
+<a class="reference external" href="https://github.com/polaco1782/raspberry-qemu">https://github.com/polaco1782/raspberry-qemu</a> appears to work well.</p>
+<p>Clone that repository and copy <tt class="docutils literal"><span class="pre">kernel-qemu</span></tt>:</p>
+<pre class="literal-block">
+$ git clone git&#64;github.com:polaco1782/raspberry-qemu.git
+$ cp raspberry-qemu/kernel-qemu .
+</pre>
+<p>At this point, booting should be possible. To test, first install
+<tt class="docutils literal"><span class="pre">qemu-system-arm</span></tt>.</p>
+<p>If you're on Fedora:</p>
+<pre class="literal-block">
+$ sudo dnf install qemu-system-arm
+</pre>
+<p>Or Debian/Ubuntu:</p>
+<pre class="literal-block">
+$ sudo apt install qemu-system-arm
+</pre>
+<p>Then run:</p>
+<pre class="literal-block">
+$ qemu-system-arm \
+    -kernel kernel-qemu \
+    -cpu arm1176 \
+    -m 256 \
+    -M versatilepb \
+    -no-reboot \
+    -serial stdio \
+    -display none \
+    -append &quot;root=/dev/sda2 panic=1 rootfstype=ext4 rw&quot; \
+    -net user,hostfwd=tcp::10022-:22 \
+    -net nic -hda \
+    2015-11-21-raspbian-jessie-lite.img
+</pre>
+<p>Note the option <tt class="docutils literal"><span class="pre">-net</span> <span class="pre">user,hostfwd=tcp::10022-:22</span></tt>. This forwards port 22 on
+raspbian to 10022 on the host, allowing us to ssh into the booted VM.</p>
+<p>You should see some output similar to:</p>
+<pre class="literal-block">
+pulseaudio: pa_context_connect() failed
+pulseaudio: Reason: Connection refused
+pulseaudio: Failed to initialize PA contextaudio: Could not init `pa' audio driver
+ALSA lib confmisc.c:768:(parse_card) cannot find card '0'
+ALSA lib conf.c:4248:(_snd_config_evaluate) function snd_func_card_driver returned error: No such file or directory
+ALSA lib confmisc.c:392:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:4248:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1251:(snd_func_refer) error evaluating name
+ALSA lib conf.c:4248:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:4727:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2239:(snd_pcm_open_noupdate) Unknown PCM default
+alsa: Could not initialize DAC
+alsa: Failed to open `default':
+alsa: Reason: No such file or directory
+ALSA lib confmisc.c:768:(parse_card) cannot find card '0'
+ALSA lib conf.c:4248:(_snd_config_evaluate) function snd_func_card_driver returned error: No such file or directory
+ALSA lib confmisc.c:392:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:4248:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1251:(snd_func_refer) error evaluating name
+ALSA lib conf.c:4248:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:4727:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2239:(snd_pcm_open_noupdate) Unknown PCM default
+alsa: Could not initialize DAC
+alsa: Failed to open `default':
+alsa: Reason: No such file or directory
+audio: Failed to create voice `lm4549.out'
+Uncompressing Linux... done, booting the kernel.
+</pre>
+<p>Test if a login works:</p>
+<pre class="literal-block">
+$ ssh localhost -o StrictHostKeyChecking=no -p 10022 -l pi
+</pre>
+<p>The password should be the default <tt class="docutils literal">raspberry</tt>, unless you changed it
+earlier.</p>
+<p>If this all works, you can start writing your <tt class="docutils literal">.travis.yml</tt> to boot this VM
+on Travis CI runs. You should first enable travis commit hooks on your
+repository (read the <a class="reference external" href="https://docs.travis-ci.com/user/getting-started/">getting started guide</a>), then start writing a
+configuration file. A simple version of the config file to start off:</p>
+<div class="highlight"><pre><span class="n">language</span><span class="p">:</span> <span class="n">generic</span>
+<span class="n">sudo</span><span class="p">:</span> <span class="n">true</span>
+<span class="n">dist</span><span class="p">:</span> <span class="n">trusty</span>
+
+<span class="n">before_install</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span>
+    <span class="o">-</span> <span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">qemu</span><span class="o">-</span><span class="n">system</span><span class="o">-</span><span class="n">arm</span> <span class="n">wget</span> <span class="n">xz</span><span class="o">-</span><span class="n">utils</span> <span class="n">sshpass</span>
+
+<span class="n">install</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">wget</span> <span class="s">&quot;https://super-secret-location.com/2015-11-21-raspbian-jessie-lite.img.xz&quot;</span>
+    <span class="o">-</span> <span class="n">unxz</span> <span class="s">&quot;2015-11-21-raspbian-jessie-lite.img.xz&quot;</span>
+    <span class="o">-</span> <span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">polaco1782</span><span class="o">/</span><span class="n">raspberry</span><span class="o">-</span><span class="n">qemu</span><span class="o">.</span><span class="n">git</span>
+
+<span class="n">before_script</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">qemu</span><span class="o">-</span><span class="n">system</span><span class="o">-</span><span class="n">arm</span> <span class="o">-</span><span class="n">kernel</span> <span class="n">raspberry</span><span class="o">-</span><span class="n">qemu</span><span class="o">/</span><span class="n">kernel</span><span class="o">-</span><span class="n">qemu</span> <span class="o">-</span><span class="n">cpu</span> <span class="n">arm1176</span> <span class="o">-</span><span class="n">m</span> <span class="mi">256</span> <span class="o">-</span><span class="n">M</span> <span class="n">versatilepb</span> <span class="o">-</span><span class="n">no</span><span class="o">-</span><span class="n">reboot</span> <span class="o">-</span><span class="n">serial</span> <span class="n">stdio</span> <span class="o">-</span><span class="n">append</span> <span class="s">&quot;root=/dev/sda2 panic=1 rootfstype=ext4 rw&quot;</span> <span class="o">-</span><span class="n">net</span> <span class="n">user</span><span class="p">,</span><span class="n">hostfwd</span><span class="o">=</span><span class="n">tcp</span><span class="p">::</span><span class="mi">10022</span><span class="o">-</span><span class="p">:</span><span class="mi">22</span> <span class="o">-</span><span class="n">net</span> <span class="n">nic</span> <span class="o">-</span><span class="n">display</span> <span class="n">none</span> <span class="o">-</span><span class="n">hda</span> <span class="mi">2015</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">21</span><span class="o">-</span><span class="n">raspbian</span><span class="o">-</span><span class="n">jessie</span><span class="o">-</span><span class="n">lite</span><span class="o">.</span><span class="n">img</span> <span class="o">&amp;</span>
+    <span class="o">-</span> <span class="o">./</span><span class="n">test</span><span class="o">/</span><span class="n">wait</span><span class="o">-</span><span class="k">for</span><span class="o">-</span><span class="n">ssh</span>
+
+<span class="n">script</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">sshpass</span> <span class="o">-</span><span class="n">p</span> <span class="n">raspberry</span> <span class="n">ssh</span> <span class="n">localhost</span> <span class="o">-</span><span class="n">o</span> <span class="n">StrictHostKeyChecking</span><span class="o">=</span><span class="n">no</span> <span class="o">-</span><span class="n">p</span> <span class="mi">10022</span> <span class="o">-</span><span class="n">l</span> <span class="n">pi</span> <span class="s">&quot;cat /etc/os-release&quot;</span>
+    <span class="c"># whatever you want to test here</span>
+</pre></div>
+<p>You should note that this requires a mirror of the image created in the earlier
+steps. Each CI run will have to download and decompress that image. With Travis
+Pro, I believe you might be able to do something different and cache it, but I
+didn't investigate this.</p>
+<p>This runs <tt class="docutils literal"><span class="pre">qemu-system-arm</span></tt> in the background. In order to wait until the VM
+is ready, I made a crude script named <tt class="docutils literal"><span class="pre">wait-for-ssh</span></tt> to ping the ssh port
+until it responded:</p>
+<div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
+
+<span class="k">while</span> <span class="nb">true</span><span class="p">;</span> <span class="k">do</span>
+    <span class="k">if</span> nc -z localhost <span class="m">10022</span> <span class="p">;</span> <span class="k">then</span>
+        <span class="nb">echo</span> <span class="s2">&quot;Found something on port 10022!&quot;</span>
+        <span class="nb">exit</span>
+<span class="nb">    </span><span class="k">else</span>
+        <span class="nb">echo</span> <span class="s2">&quot;Nothing found on port 10022, sleeping...&quot;</span>
+        sleep 10
+    <span class="k">fi</span>
+<span class="k">done</span>
+</pre></div>
+<p>When this is done, you can actually test the stuff you wanted to test in the
+first place! In the example <tt class="docutils literal">.travis.yml</tt>, I do a sanity check and cat
+<tt class="docutils literal"><span class="pre">/etc/os-release</span></tt>, expecting something like:</p>
+<pre class="literal-block">
+PRETTY_NAME=&quot;Raspbian GNU/Linux 8 (jessie)&quot;
+NAME=&quot;Raspbian GNU/Linux&quot;
+VERSION_ID=&quot;8&quot;
+VERSION=&quot;8 (jessie)&quot;
+ID=raspbian
+ID_LIKE=debian
+HOME_URL=&quot;http://www.raspbian.org/&quot;
+SUPPORT_URL=&quot;http://www.raspbian.org/RaspbianForums&quot;
+BUG_REPORT_URL=&quot;http://www.raspbian.org/RaspbianBugs&quot;
+</pre>
+<p>Now you have a little Raspbian VM booted on every commit. Run some ansible or
+puppet against that and you're done. Happy testing!</p>
+
+  </div>
+</article>
+<hr />
+<article>
+  <div class="article_title">
     <h3><a href="../kpatch-package-builder">kpatch-package-builder 0.1.0</a></h3>
   </div>
   <div class="article_text">
@@ -105,7 +317,7 @@ Size        : 281661
 License     : GPLv2
 Signature   : <span class="o">(</span>none<span class="o">)</span>
 Source RPM  : kpatch-module-livepatch-test-1-1.src.rpm
-Build Date  : Wed 24 Jun 2015 15:26:46 EDT
+Build Date  : Wed <span class="m">24</span> Jun <span class="m">2015</span> 15:26:46 EDT
 Build Host  : localhost
 Relocations : <span class="o">(</span>not relocatable<span class="o">)</span>
 Summary     : kpatch livepatch module
@@ -120,7 +332,7 @@ Package generated from livepatch-test.patch by kpatch-package-builder
 <p>The current options available:</p>
 <pre class="code bash literal-block">
 <span class="o">[</span>vagrant&#64;localhost ~<span class="o">]</span><span class="nv">$ </span>kpatch-package-builder -h
-usage: kpatch-package-builder <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-v<span class="o">]</span> <span class="o">[</span>-o FILE | -b<span class="o">]</span> <span class="o">[</span>-k VERSION<span class="o">]</span> <span class="o">[</span>-a ARCH<span class="o">]</span>
+usage: kpatch-package-builder <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-v<span class="o">]</span> <span class="o">[</span>-o FILE <span class="p">|</span> -b<span class="o">]</span> <span class="o">[</span>-k VERSION<span class="o">]</span> <span class="o">[</span>-a ARCH<span class="o">]</span>
                               <span class="o">[</span>--set-release NUM<span class="o">]</span> <span class="o">[</span>--set-version NUM<span class="o">]</span> <span class="o">[</span>-d<span class="o">]</span>
                               PATCH
 
@@ -146,7 +358,7 @@ optional arguments:
 
 Usage examples:
 
-Build an RPM package <span class="k">for </span>a given patch:
+Build an RPM package <span class="k">for</span> a given patch:
 
     <span class="nv">$ </span>kpatch-package-builder --build-rpm module.patch
 
