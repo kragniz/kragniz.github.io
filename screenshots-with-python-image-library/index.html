@@ -76,7 +76,7 @@ can copy each pixel into our buffer.</p>
 that was the original aim. Luckily, there's <tt class="docutils literal">Image.frombuffer</tt> to do all the
 hard work when combined with <tt class="docutils literal">Pixbuf.get_pixels()</tt>.</p>
 <p>Full code:</p>
-<div class="highlight"><pre><span class="kn">import</span> <span class="nn">Image</span><span class="o">,</span> <span class="nn">gtk</span>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">Image</span><span class="o">,</span> <span class="nn">gtk</span>
 
 <span class="k">class</span> <span class="nc">Screenshotter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -101,18 +101,18 @@ hard work when combined with <tt class="docutils literal">Pixbuf.get_pixels()</t
         <span class="p">)</span>
 
         <span class="n">final_screengrab</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span>
-            <span class="s">&quot;RGB&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;RGB&quot;</span><span class="p">,</span>
             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_height</span><span class="p">),</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">screengrab</span><span class="o">.</span><span class="n">get_pixels</span><span class="p">(),</span>
-            <span class="s">&quot;raw&quot;</span><span class="p">,</span>
-            <span class="s">&quot;RGB&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;raw&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;RGB&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">screengrab</span><span class="o">.</span><span class="n">get_rowstride</span><span class="p">(),</span>
             <span class="mi">1</span>
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">final_screengrab</span>
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">screenshot</span> <span class="o">=</span> <span class="n">Screenshotter</span><span class="p">()</span>
     <span class="n">image</span> <span class="o">=</span> <span class="n">screenshot</span><span class="o">.</span><span class="n">take</span><span class="p">()</span>
 </pre></div>

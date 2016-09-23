@@ -63,7 +63,7 @@ writing a helper to interact with <a class="reference external" href="http://vag
 lightweight last.fm client (I later added it to <a class="reference external" href="https://launchpad.net/vagalume-docky">a project on launchpad</a>). The vagalume DBus methods and
 signals are mostly undocumented, but they can be found lurking around after a
 quick look at <a class="reference external" href="http://gitorious.org/vagalume/vagalume/blobs/master/src/dbus.h">some of the source code</a>.</p>
-<div class="highlight"><pre><span class="kn">import</span> <span class="nn">dbus</span>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dbus</span>
 <span class="kn">import</span> <span class="nn">gobject</span>
 <span class="kn">from</span> <span class="nn">dbus.mainloop.glib</span> <span class="kn">import</span> <span class="n">DBusGMainLoop</span>
 
@@ -72,23 +72,23 @@ quick look at <a class="reference external" href="http://gitorious.org/vagalume/
         <span class="n">dbus</span><span class="o">.</span><span class="n">mainloop</span><span class="o">.</span><span class="n">glib</span><span class="o">.</span><span class="n">DBusGMainLoop</span><span class="p">(</span><span class="n">set_as_default</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bus</span> <span class="o">=</span> <span class="n">dbus</span><span class="o">.</span><span class="n">SessionBus</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bus</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="s">&#39;com.igalia.vagalume&#39;</span><span class="p">,</span>
-                                          <span class="s">&#39;/com/igalia/vagalume&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bus</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="s1">&#39;com.igalia.vagalume&#39;</span><span class="p">,</span>
+                                          <span class="s1">&#39;/com/igalia/vagalume&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">bus</span><span class="o">.</span><span class="n">add_signal_receiver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">song_changed</span><span class="p">,</span>
-                                     <span class="n">dbus_interface</span><span class="o">=</span><span class="s">&#39;com.igalia.vagalume&#39;</span><span class="p">,</span>
-                                     <span class="n">signal_name</span><span class="o">=</span><span class="s">&#39;notify&#39;</span><span class="p">)</span>
+                                     <span class="n">dbus_interface</span><span class="o">=</span><span class="s1">&#39;com.igalia.vagalume&#39;</span><span class="p">,</span>
+                                     <span class="n">signal_name</span><span class="o">=</span><span class="s1">&#39;notify&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">song_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">state</span> <span class="o">==</span> <span class="s">&#39;stopped&#39;</span><span class="p">:</span>
-            <span class="c">#do something when the player is stopped</span>
+        <span class="k">if</span> <span class="n">state</span> <span class="o">==</span> <span class="s1">&#39;stopped&#39;</span><span class="p">:</span>
+            <span class="c1">#do something when the player is stopped</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">stopped</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">state</span> <span class="o">==</span> <span class="s">&#39;playing&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">state</span> <span class="o">==</span> <span class="s1">&#39;playing&#39;</span><span class="p">:</span>
             <span class="n">artist</span> <span class="o">=</span> <span class="n">args</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">title</span> <span class="o">=</span> <span class="n">args</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span>
             <span class="n">album</span> <span class="o">=</span> <span class="n">args</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-            <span class="c">#do something with the data here...</span>
+            <span class="c1">#do something with the data here...</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">playing</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">album</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">stopped</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -99,10 +99,10 @@ quick look at <a class="reference external" href="http://gitorious.org/vagalume/
         <span class="sd">&#39;&#39;&#39;Run when new song is played&#39;&#39;&#39;</span>
         <span class="k">pass</span>
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">app</span> <span class="o">=</span> <span class="n">Vagalume</span><span class="p">()</span>
 
-    <span class="c"># gtk mainloop can be used if you&#39;re using this as part of a gtk app</span>
+    <span class="c1"># gtk mainloop can be used if you&#39;re using this as part of a gtk app</span>
     <span class="n">mainloop</span> <span class="o">=</span> <span class="n">gobject</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">(</span><span class="n">is_running</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="n">mainloop</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
@@ -112,17 +112,17 @@ vagalume. This checks whether the notification is due to vagalume starting a
 new song or stopping the current one and runs either <tt class="docutils literal">self.stopped</tt> or
 <tt class="docutils literal">self.playing</tt>. These two methods by default do nothing, so subclassing
 <tt class="docutils literal">Vagalume</tt> to make them do something useful is good:</p>
-<div class="highlight"><pre><span class="k">class</span> <span class="nc">MyFancyVagalume</span><span class="p">(</span><span class="n">Vagalume</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyFancyVagalume</span><span class="p">(</span><span class="n">Vagalume</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">stopped</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">print</span> <span class="s">&#39;just stopped the beat&#39;</span>
+        <span class="k">print</span> <span class="s1">&#39;just stopped the beat&#39;</span>
 
     <span class="k">def</span> <span class="nf">playing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">artist</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">album</span><span class="p">):</span>
-        <span class="k">print</span> <span class="s">&#39;now playing &quot;</span><span class="si">%s</span><span class="s">&quot; by </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">artist</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s1">&#39;now playing &quot;</span><span class="si">%s</span><span class="s1">&quot; by </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">artist</span><span class="p">)</span>
 </pre></div>
 <p>To interact with vagalume do something like:</p>
-<div class="highlight"><pre><span class="n">vagalume</span> <span class="o">=</span> <span class="n">Vagalume</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><span class="n">vagalume</span> <span class="o">=</span> <span class="n">Vagalume</span><span class="p">()</span>
 
-<span class="c"># do anything you want with dbus</span>
+<span class="c1"># do anything you want with dbus</span>
 <span class="n">vagalume</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">Play</span><span class="p">()</span>
 <span class="n">vagalume</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">Skip</span><span class="p">()</span>
 <span class="n">vagalume</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">LoveTrack</span><span class="p">()</span>

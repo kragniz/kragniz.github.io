@@ -88,7 +88,7 @@ will invoke rpmbuild and build the package in place. The makes the kernel patch
 to distributable package a single step.</p>
 <p>As an example, creating a package from a patch file:</p>
 <pre class="code bash literal-block">
-<span class="o">[</span>vagrant&#64;localhost ~<span class="o">]</span><span class="nv">$ </span>kpatch-package-builder -b livepatch-test.patch
+<span class="o">[</span>vagrant&#64;localhost ~<span class="o">]</span>$ kpatch-package-builder -b livepatch-test.patch
 kpatch-package-builder: generating spec file...
 kpatch-package-builder: building RPM...
 kpatch-package-builder: writing spec file to /tmp/kpatch_3I6mHJ.spec...
@@ -96,7 +96,7 @@ kpatch-package-builder: writing kpatch-module-livepatch-test-1-1.x86_64.rpm...
 </pre>
 <p>The default metadata associated with that generated package:</p>
 <pre class="code bash literal-block">
-<span class="o">[</span>vagrant&#64;localhost ~<span class="o">]</span><span class="nv">$ </span>rpm -qip kpatch-module-livepatch-test-1-1.x86_64.rpm
+<span class="o">[</span>vagrant&#64;localhost ~<span class="o">]</span>$ rpm -qip kpatch-module-livepatch-test-1-1.x86_64.rpm
 Name        : kpatch-module-livepatch-test
 Version     : 1
 Release     : 1
@@ -116,12 +116,12 @@ Package generated from livepatch-test.patch by kpatch-package-builder
 </pre>
 <p>The contents of the package:</p>
 <pre class="code bash literal-block">
-<span class="o">[</span>vagrant&#64;localhost ~<span class="o">]</span><span class="nv">$ </span>rpm -qlp kpatch-module-livepatch-test-1-1.x86_64.rpm
+<span class="o">[</span>vagrant&#64;localhost ~<span class="o">]</span>$ rpm -qlp kpatch-module-livepatch-test-1-1.x86_64.rpm
 /var/lib/kpatch/3.10.0-229.el7.x86_64/kpatch-livepatch-test.ko
 </pre>
 <p>The current options available:</p>
 <pre class="code bash literal-block">
-<span class="o">[</span>vagrant&#64;localhost ~<span class="o">]</span><span class="nv">$ </span>kpatch-package-builder -h
+<span class="o">[</span>vagrant&#64;localhost ~<span class="o">]</span>$ kpatch-package-builder -h
 usage: kpatch-package-builder <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-v<span class="o">]</span> <span class="o">[</span>-o FILE <span class="p">|</span> -b<span class="o">]</span> <span class="o">[</span>-k VERSION<span class="o">]</span> <span class="o">[</span>-a ARCH<span class="o">]</span>
                               <span class="o">[</span>--set-release NUM<span class="o">]</span> <span class="o">[</span>--set-version NUM<span class="o">]</span> <span class="o">[</span>-d<span class="o">]</span>
                               PATCH
@@ -133,7 +133,7 @@ positional arguments:
   PATCH                 patch file from which to build the livepatch module
 
 optional arguments:
-  -h, --help            show this <span class="nb">help </span>message and <span class="nb">exit</span>
+  -h, --help            show this <span class="nb">help</span> message and <span class="nb">exit</span>
   -v, --version         show program<span class="err">'</span>s version number and <span class="nb">exit</span>
   -o FILE, --output FILE
                         name of output spec file
@@ -150,11 +150,11 @@ Usage examples:
 
 Build an RPM package <span class="k">for</span> a given patch:
 
-    <span class="nv">$ </span>kpatch-package-builder --build-rpm module.patch
+    $ kpatch-package-builder --build-rpm module.patch
 
 Generate a spec file to later build into an RPM:
 
-    <span class="nv">$ </span>kpatch-package-builder --output module.spec module.patch
+    $ kpatch-package-builder --output module.spec module.patch
 </pre>
 <p>If you want to test this or use it yourself, the code lives at <a class="reference external" href="https://github.com/centos-livepatching/kpatch-package-builder">https://github.com/centos-livepatching/kpatch-package-builder</a>.</p>
 <div class="section" id="future-work">

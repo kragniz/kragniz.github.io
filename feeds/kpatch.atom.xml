@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>blog.kragniz.eu</title><link href="http://blog.kragniz.eu/" rel="alternate"></link><link href="http://blog.kragniz.eu/feeds/kpatch.atom.xml" rel="self"></link><id>http://blog.kragniz.eu/</id><updated>2015-06-29T22:23:00+00:00</updated><entry><title>kpatch-package-builder 0.1.0</title><link href="http://blog.kragniz.eu/kpatch-package-builder" rel="alternate"></link><updated>2015-06-29T22:23:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2015-06-29:kpatch-package-builder</id><summary type="html">&lt;p&gt;As part of &lt;a class="reference external" href="https://developers.google.com/open-source/gsoc/"&gt;Google Summer of Code&lt;/a&gt;, I've been working with the
+<feed xmlns="http://www.w3.org/2005/Atom"><title>blog.kragniz.eu</title><link href="http://blog.kragniz.eu/" rel="alternate"></link><link href="http://blog.kragniz.eu/feeds/kpatch.atom.xml" rel="self"></link><id>http://blog.kragniz.eu/</id><updated>2015-06-29T22:23:00+00:00</updated><entry><title>kpatch-package-builder 0.1.0</title><link href="http://blog.kragniz.eu/kpatch-package-builder" rel="alternate"></link><published>2015-06-29T22:23:00+00:00</published><updated>2015-06-29T22:23:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2015-06-29:kpatch-package-builder</id><summary type="html">&lt;p&gt;As part of &lt;a class="reference external" href="https://developers.google.com/open-source/gsoc/"&gt;Google Summer of Code&lt;/a&gt;, I've been working with the
 CentOS project to create a delivery and build system to provide easy and
 automatic delivery of patches to a running linux kernel. CentOS 7 currently has
 support for live patching a running kernel (via the kpatch kernel module and
@@ -29,7 +29,7 @@ will invoke rpmbuild and build the package in place. The makes the kernel patch
 to distributable package a single step.&lt;/p&gt;
 &lt;p&gt;As an example, creating a package from a patch file:&lt;/p&gt;
 &lt;pre class="code bash literal-block"&gt;
-&lt;span class="o"&gt;[&lt;/span&gt;vagrant&amp;#64;localhost ~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;kpatch-package-builder -b livepatch-test.patch
+&lt;span class="o"&gt;[&lt;/span&gt;vagrant&amp;#64;localhost ~&lt;span class="o"&gt;]&lt;/span&gt;$ kpatch-package-builder -b livepatch-test.patch
 kpatch-package-builder: generating spec file...
 kpatch-package-builder: building RPM...
 kpatch-package-builder: writing spec file to /tmp/kpatch_3I6mHJ.spec...
@@ -37,7 +37,7 @@ kpatch-package-builder: writing kpatch-module-livepatch-test-1-1.x86_64.rpm...
 &lt;/pre&gt;
 &lt;p&gt;The default metadata associated with that generated package:&lt;/p&gt;
 &lt;pre class="code bash literal-block"&gt;
-&lt;span class="o"&gt;[&lt;/span&gt;vagrant&amp;#64;localhost ~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;rpm -qip kpatch-module-livepatch-test-1-1.x86_64.rpm
+&lt;span class="o"&gt;[&lt;/span&gt;vagrant&amp;#64;localhost ~&lt;span class="o"&gt;]&lt;/span&gt;$ rpm -qip kpatch-module-livepatch-test-1-1.x86_64.rpm
 Name        : kpatch-module-livepatch-test
 Version     : 1
 Release     : 1
@@ -57,12 +57,12 @@ Package generated from livepatch-test.patch by kpatch-package-builder
 &lt;/pre&gt;
 &lt;p&gt;The contents of the package:&lt;/p&gt;
 &lt;pre class="code bash literal-block"&gt;
-&lt;span class="o"&gt;[&lt;/span&gt;vagrant&amp;#64;localhost ~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;rpm -qlp kpatch-module-livepatch-test-1-1.x86_64.rpm
+&lt;span class="o"&gt;[&lt;/span&gt;vagrant&amp;#64;localhost ~&lt;span class="o"&gt;]&lt;/span&gt;$ rpm -qlp kpatch-module-livepatch-test-1-1.x86_64.rpm
 /var/lib/kpatch/3.10.0-229.el7.x86_64/kpatch-livepatch-test.ko
 &lt;/pre&gt;
 &lt;p&gt;The current options available:&lt;/p&gt;
 &lt;pre class="code bash literal-block"&gt;
-&lt;span class="o"&gt;[&lt;/span&gt;vagrant&amp;#64;localhost ~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;kpatch-package-builder -h
+&lt;span class="o"&gt;[&lt;/span&gt;vagrant&amp;#64;localhost ~&lt;span class="o"&gt;]&lt;/span&gt;$ kpatch-package-builder -h
 usage: kpatch-package-builder &lt;span class="o"&gt;[&lt;/span&gt;-h&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;-v&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;-o FILE &lt;span class="p"&gt;|&lt;/span&gt; -b&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;-k VERSION&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;-a ARCH&lt;span class="o"&gt;]&lt;/span&gt;
                               &lt;span class="o"&gt;[&lt;/span&gt;--set-release NUM&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;--set-version NUM&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;-d&lt;span class="o"&gt;]&lt;/span&gt;
                               PATCH
@@ -74,7 +74,7 @@ positional arguments:
   PATCH                 patch file from which to build the livepatch module
 
 optional arguments:
-  -h, --help            show this &lt;span class="nb"&gt;help &lt;/span&gt;message and &lt;span class="nb"&gt;exit&lt;/span&gt;
+  -h, --help            show this &lt;span class="nb"&gt;help&lt;/span&gt; message and &lt;span class="nb"&gt;exit&lt;/span&gt;
   -v, --version         show program&lt;span class="err"&gt;'&lt;/span&gt;s version number and &lt;span class="nb"&gt;exit&lt;/span&gt;
   -o FILE, --output FILE
                         name of output spec file
@@ -91,11 +91,11 @@ Usage examples:
 
 Build an RPM package &lt;span class="k"&gt;for&lt;/span&gt; a given patch:
 
-    &lt;span class="nv"&gt;$ &lt;/span&gt;kpatch-package-builder --build-rpm module.patch
+    $ kpatch-package-builder --build-rpm module.patch
 
 Generate a spec file to later build into an RPM:
 
-    &lt;span class="nv"&gt;$ &lt;/span&gt;kpatch-package-builder --output module.spec module.patch
+    $ kpatch-package-builder --output module.spec module.patch
 &lt;/pre&gt;
 &lt;p&gt;If you want to test this or use it yourself, the code lives at &lt;a class="reference external" href="https://github.com/centos-livepatching/kpatch-package-builder"&gt;https://github.com/centos-livepatching/kpatch-package-builder&lt;/a&gt;.&lt;/p&gt;
 &lt;div class="section" id="future-work"&gt;

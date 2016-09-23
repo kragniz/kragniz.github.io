@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>blog.kragniz.eu</title><link href="http://blog.kragniz.eu/" rel="alternate"></link><link href="http://blog.kragniz.eu/feeds/louis-taylor.atom.xml" rel="self"></link><id>http://blog.kragniz.eu/</id><updated>2016-01-22T22:23:00+00:00</updated><entry><title>Raspbian on Travis CI</title><link href="http://blog.kragniz.eu/raspbian-on-travis-ci" rel="alternate"></link><updated>2016-01-22T22:23:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2016-01-22:raspbian-on-travis-ci</id><summary type="html">&lt;p&gt;For abersailbot, I've been working on automation of provisioning images to run
+<feed xmlns="http://www.w3.org/2005/Atom"><title>blog.kragniz.eu</title><link href="http://blog.kragniz.eu/" rel="alternate"></link><link href="http://blog.kragniz.eu/feeds/louis-taylor.atom.xml" rel="self"></link><id>http://blog.kragniz.eu/</id><updated>2016-01-22T22:23:00+00:00</updated><entry><title>Raspbian on Travis CI</title><link href="http://blog.kragniz.eu/raspbian-on-travis-ci" rel="alternate"></link><published>2016-01-22T22:23:00+00:00</published><updated>2016-01-22T22:23:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2016-01-22:raspbian-on-travis-ci</id><summary type="html">&lt;p&gt;For abersailbot, I've been working on automation of provisioning images to run
 on the main raspberry pi inside the boat. In the past, this has been a
 primitive bash script which installs packages and configurations files with a
 dubious amount of calls out to apt, cp and sed. Wanting to make this a little
@@ -146,7 +146,7 @@ earlier.&lt;/p&gt;
 on Travis CI runs. You should first enable travis commit hooks on your
 repository (read the &lt;a class="reference external" href="https://docs.travis-ci.com/user/getting-started/"&gt;getting started guide&lt;/a&gt;), then start writing a
 configuration file. A simple version of the config file to start off:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;language&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;generic&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;language&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;generic&lt;/span&gt;
 &lt;span class="n"&gt;sudo&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;true&lt;/span&gt;
 &lt;span class="n"&gt;dist&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;trusty&lt;/span&gt;
 
@@ -155,17 +155,17 @@ configuration file. A simple version of the config file to start off:&lt;/p&gt;
     &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="n"&gt;apt&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;qemu&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;system&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;arm&lt;/span&gt; &lt;span class="n"&gt;wget&lt;/span&gt; &lt;span class="n"&gt;xz&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;utils&lt;/span&gt; &lt;span class="n"&gt;sshpass&lt;/span&gt;
 
 &lt;span class="n"&gt;install&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-    &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;wget&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;https://super-secret-location.com/2015-11-21-raspbian-jessie-lite.img.xz&amp;quot;&lt;/span&gt;
-    &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;unxz&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;2015-11-21-raspbian-jessie-lite.img.xz&amp;quot;&lt;/span&gt;
+    &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;wget&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;https://super-secret-location.com/2015-11-21-raspbian-jessie-lite.img.xz&amp;quot;&lt;/span&gt;
+    &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;unxz&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;2015-11-21-raspbian-jessie-lite.img.xz&amp;quot;&lt;/span&gt;
     &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;clone&lt;/span&gt; &lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="n"&gt;github&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;com&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;polaco1782&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;raspberry&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;qemu&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;git&lt;/span&gt;
 
 &lt;span class="n"&gt;before_script&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-    &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;qemu&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;system&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;arm&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;kernel&lt;/span&gt; &lt;span class="n"&gt;raspberry&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;qemu&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;kernel&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;qemu&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;cpu&lt;/span&gt; &lt;span class="n"&gt;arm1176&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="mi"&gt;256&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;M&lt;/span&gt; &lt;span class="n"&gt;versatilepb&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;no&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;reboot&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;serial&lt;/span&gt; &lt;span class="n"&gt;stdio&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;root=/dev/sda2 panic=1 rootfstype=ext4 rw&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;net&lt;/span&gt; &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;hostfwd&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;tcp&lt;/span&gt;&lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="mi"&gt;10022&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;22&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;net&lt;/span&gt; &lt;span class="n"&gt;nic&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;display&lt;/span&gt; &lt;span class="n"&gt;none&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;hda&lt;/span&gt; &lt;span class="mi"&gt;2015&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;11&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;21&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;raspbian&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;jessie&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;lite&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;img&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt;
+    &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;qemu&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;system&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;arm&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;kernel&lt;/span&gt; &lt;span class="n"&gt;raspberry&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;qemu&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;kernel&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;qemu&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;cpu&lt;/span&gt; &lt;span class="n"&gt;arm1176&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="mi"&gt;256&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;M&lt;/span&gt; &lt;span class="n"&gt;versatilepb&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;no&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;reboot&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;serial&lt;/span&gt; &lt;span class="n"&gt;stdio&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;root=/dev/sda2 panic=1 rootfstype=ext4 rw&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;net&lt;/span&gt; &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;hostfwd&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;tcp&lt;/span&gt;&lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="mi"&gt;10022&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;22&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;net&lt;/span&gt; &lt;span class="n"&gt;nic&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;display&lt;/span&gt; &lt;span class="n"&gt;none&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;hda&lt;/span&gt; &lt;span class="mi"&gt;2015&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;11&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;21&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;raspbian&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;jessie&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;lite&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;img&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt;
     &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="o"&gt;./&lt;/span&gt;&lt;span class="n"&gt;test&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;wait&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;ssh&lt;/span&gt;
 
 &lt;span class="n"&gt;script&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-    &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;sshpass&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="n"&gt;raspberry&lt;/span&gt; &lt;span class="n"&gt;ssh&lt;/span&gt; &lt;span class="n"&gt;localhost&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;o&lt;/span&gt; &lt;span class="n"&gt;StrictHostKeyChecking&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;no&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="mi"&gt;10022&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt; &lt;span class="n"&gt;pi&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;cat /etc/os-release&amp;quot;&lt;/span&gt;
-    &lt;span class="c"&gt;# whatever you want to test here&lt;/span&gt;
+    &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;sshpass&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="n"&gt;raspberry&lt;/span&gt; &lt;span class="n"&gt;ssh&lt;/span&gt; &lt;span class="n"&gt;localhost&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;o&lt;/span&gt; &lt;span class="n"&gt;StrictHostKeyChecking&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;no&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="mi"&gt;10022&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt; &lt;span class="n"&gt;pi&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;cat /etc/os-release&amp;quot;&lt;/span&gt;
+    &lt;span class="c1"&gt;# whatever you want to test here&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;You should note this requires a mirror of the image created in the earlier
 steps. Each CI run will have to download and decompress the image. With Travis
@@ -174,13 +174,13 @@ didn't investigate this.&lt;/p&gt;
 &lt;p&gt;This runs &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;qemu-system-arm&lt;/span&gt;&lt;/tt&gt; in the background. In order to wait until the VM
 is ready, I made a crude script named &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;wait-for-ssh&lt;/span&gt;&lt;/tt&gt; to ping the ssh port
 until it responded:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;#!/usr/bin/env bash&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="ch"&gt;#!/usr/bin/env bash&lt;/span&gt;
 
-&lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+&lt;span class="k"&gt;while&lt;/span&gt; true&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
     &lt;span class="k"&gt;if&lt;/span&gt; nc -z localhost &lt;span class="m"&gt;10022&lt;/span&gt; &lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
         &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Found something on port 10022!&amp;quot;&lt;/span&gt;
         &lt;span class="nb"&gt;exit&lt;/span&gt;
-&lt;span class="nb"&gt;    &lt;/span&gt;&lt;span class="k"&gt;else&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt;
         &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Nothing found on port 10022, sleeping...&amp;quot;&lt;/span&gt;
         sleep 10
     &lt;span class="k"&gt;fi&lt;/span&gt;
@@ -202,7 +202,7 @@ BUG_REPORT_URL=&amp;quot;http://www.raspbian.org/RaspbianBugs&amp;quot;
 &lt;/pre&gt;
 &lt;p&gt;Now you have a little Raspbian VM booted on every commit. Run some ansible or
 puppet against it and you're done. Happy testing!&lt;/p&gt;
-</summary><category term="raspbian"></category><category term="raspberry pi"></category><category term="qemu"></category></entry><entry><title>kpatch-package-builder 0.1.0</title><link href="http://blog.kragniz.eu/kpatch-package-builder" rel="alternate"></link><updated>2015-06-29T22:23:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2015-06-29:kpatch-package-builder</id><summary type="html">&lt;p&gt;As part of &lt;a class="reference external" href="https://developers.google.com/open-source/gsoc/"&gt;Google Summer of Code&lt;/a&gt;, I've been working with the
+</summary><category term="raspbian"></category><category term="raspberry pi"></category><category term="qemu"></category></entry><entry><title>kpatch-package-builder 0.1.0</title><link href="http://blog.kragniz.eu/kpatch-package-builder" rel="alternate"></link><published>2015-06-29T22:23:00+00:00</published><updated>2015-06-29T22:23:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2015-06-29:kpatch-package-builder</id><summary type="html">&lt;p&gt;As part of &lt;a class="reference external" href="https://developers.google.com/open-source/gsoc/"&gt;Google Summer of Code&lt;/a&gt;, I've been working with the
 CentOS project to create a delivery and build system to provide easy and
 automatic delivery of patches to a running linux kernel. CentOS 7 currently has
 support for live patching a running kernel (via the kpatch kernel module and
@@ -232,7 +232,7 @@ will invoke rpmbuild and build the package in place. The makes the kernel patch
 to distributable package a single step.&lt;/p&gt;
 &lt;p&gt;As an example, creating a package from a patch file:&lt;/p&gt;
 &lt;pre class="code bash literal-block"&gt;
-&lt;span class="o"&gt;[&lt;/span&gt;vagrant&amp;#64;localhost ~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;kpatch-package-builder -b livepatch-test.patch
+&lt;span class="o"&gt;[&lt;/span&gt;vagrant&amp;#64;localhost ~&lt;span class="o"&gt;]&lt;/span&gt;$ kpatch-package-builder -b livepatch-test.patch
 kpatch-package-builder: generating spec file...
 kpatch-package-builder: building RPM...
 kpatch-package-builder: writing spec file to /tmp/kpatch_3I6mHJ.spec...
@@ -240,7 +240,7 @@ kpatch-package-builder: writing kpatch-module-livepatch-test-1-1.x86_64.rpm...
 &lt;/pre&gt;
 &lt;p&gt;The default metadata associated with that generated package:&lt;/p&gt;
 &lt;pre class="code bash literal-block"&gt;
-&lt;span class="o"&gt;[&lt;/span&gt;vagrant&amp;#64;localhost ~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;rpm -qip kpatch-module-livepatch-test-1-1.x86_64.rpm
+&lt;span class="o"&gt;[&lt;/span&gt;vagrant&amp;#64;localhost ~&lt;span class="o"&gt;]&lt;/span&gt;$ rpm -qip kpatch-module-livepatch-test-1-1.x86_64.rpm
 Name        : kpatch-module-livepatch-test
 Version     : 1
 Release     : 1
@@ -260,12 +260,12 @@ Package generated from livepatch-test.patch by kpatch-package-builder
 &lt;/pre&gt;
 &lt;p&gt;The contents of the package:&lt;/p&gt;
 &lt;pre class="code bash literal-block"&gt;
-&lt;span class="o"&gt;[&lt;/span&gt;vagrant&amp;#64;localhost ~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;rpm -qlp kpatch-module-livepatch-test-1-1.x86_64.rpm
+&lt;span class="o"&gt;[&lt;/span&gt;vagrant&amp;#64;localhost ~&lt;span class="o"&gt;]&lt;/span&gt;$ rpm -qlp kpatch-module-livepatch-test-1-1.x86_64.rpm
 /var/lib/kpatch/3.10.0-229.el7.x86_64/kpatch-livepatch-test.ko
 &lt;/pre&gt;
 &lt;p&gt;The current options available:&lt;/p&gt;
 &lt;pre class="code bash literal-block"&gt;
-&lt;span class="o"&gt;[&lt;/span&gt;vagrant&amp;#64;localhost ~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;kpatch-package-builder -h
+&lt;span class="o"&gt;[&lt;/span&gt;vagrant&amp;#64;localhost ~&lt;span class="o"&gt;]&lt;/span&gt;$ kpatch-package-builder -h
 usage: kpatch-package-builder &lt;span class="o"&gt;[&lt;/span&gt;-h&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;-v&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;-o FILE &lt;span class="p"&gt;|&lt;/span&gt; -b&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;-k VERSION&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;-a ARCH&lt;span class="o"&gt;]&lt;/span&gt;
                               &lt;span class="o"&gt;[&lt;/span&gt;--set-release NUM&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;--set-version NUM&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;-d&lt;span class="o"&gt;]&lt;/span&gt;
                               PATCH
@@ -277,7 +277,7 @@ positional arguments:
   PATCH                 patch file from which to build the livepatch module
 
 optional arguments:
-  -h, --help            show this &lt;span class="nb"&gt;help &lt;/span&gt;message and &lt;span class="nb"&gt;exit&lt;/span&gt;
+  -h, --help            show this &lt;span class="nb"&gt;help&lt;/span&gt; message and &lt;span class="nb"&gt;exit&lt;/span&gt;
   -v, --version         show program&lt;span class="err"&gt;'&lt;/span&gt;s version number and &lt;span class="nb"&gt;exit&lt;/span&gt;
   -o FILE, --output FILE
                         name of output spec file
@@ -294,11 +294,11 @@ Usage examples:
 
 Build an RPM package &lt;span class="k"&gt;for&lt;/span&gt; a given patch:
 
-    &lt;span class="nv"&gt;$ &lt;/span&gt;kpatch-package-builder --build-rpm module.patch
+    $ kpatch-package-builder --build-rpm module.patch
 
 Generate a spec file to later build into an RPM:
 
-    &lt;span class="nv"&gt;$ &lt;/span&gt;kpatch-package-builder --output module.spec module.patch
+    $ kpatch-package-builder --output module.spec module.patch
 &lt;/pre&gt;
 &lt;p&gt;If you want to test this or use it yourself, the code lives at &lt;a class="reference external" href="https://github.com/centos-livepatching/kpatch-package-builder"&gt;https://github.com/centos-livepatching/kpatch-package-builder&lt;/a&gt;.&lt;/p&gt;
 &lt;div class="section" id="future-work"&gt;
@@ -308,7 +308,7 @@ of patches across a set of kernel versions easy. This will be working on top of
 the basic kpatch-package-builder functionality to allow building many versions
 of packages for particular kernels.&lt;/p&gt;
 &lt;/div&gt;
-</summary><category term="kernel"></category><category term="centos"></category><category term="gsoc"></category><category term="kpatch"></category></entry><entry><title>Vagrant on fedora 21 and later</title><link href="http://blog.kragniz.eu/vagrant-fedora-21" rel="alternate"></link><updated>2015-05-10T22:23:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2015-05-10:vagrant-fedora-21</id><summary type="html">&lt;p&gt;Vagrant is &lt;a class="reference external" href="https://bugzilla.redhat.com/show_bug.cgi?id=1020456"&gt;now packaged&lt;/a&gt; in Fedora 21 and later versions, which is great news.
+</summary><category term="kernel"></category><category term="centos"></category><category term="gsoc"></category><category term="kpatch"></category></entry><entry><title>Vagrant on fedora 21 and later</title><link href="http://blog.kragniz.eu/vagrant-fedora-21" rel="alternate"></link><published>2015-05-10T22:23:00+00:00</published><updated>2015-05-10T22:23:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2015-05-10:vagrant-fedora-21</id><summary type="html">&lt;p&gt;Vagrant is &lt;a class="reference external" href="https://bugzilla.redhat.com/show_bug.cgi?id=1020456"&gt;now packaged&lt;/a&gt; in Fedora 21 and later versions, which is great news.
 No more messing around with the horror of rvm!&lt;/p&gt;
 &lt;p&gt;After installing vagrant and the libvirt plugin with yum:&lt;/p&gt;
 &lt;pre class="literal-block"&gt;
@@ -337,18 +337,18 @@ $ rvm implode
 &lt;/pre&gt;
 &lt;p&gt;and everything will be happy, where happy is defined by vagrant running and
 having the fewest versions of ruby installed.&lt;/p&gt;
-</summary><category term="fedora"></category><category term="vagrant"></category><category term="libvirt"></category></entry><entry><title>A brief five year interlude</title><link href="http://blog.kragniz.eu/interlude" rel="alternate"></link><updated>2015-01-23T22:23:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2015-01-23:interlude</id><summary type="html">&lt;p&gt;I've since done my GCSE and A-level exams, and am now half way
+</summary><category term="fedora"></category><category term="vagrant"></category><category term="libvirt"></category></entry><entry><title>A brief five year interlude</title><link href="http://blog.kragniz.eu/interlude" rel="alternate"></link><published>2015-01-23T22:23:00+00:00</published><updated>2015-01-23T22:23:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2015-01-23:interlude</id><summary type="html">&lt;p&gt;I've since done my GCSE and A-level exams, and am now half way
 through university.&lt;/p&gt;
 &lt;p&gt;Some sailing robots made with friends from my university:&lt;/p&gt;
 &lt;img alt="" src="http://blog.kragniz.eu/images/dewi.jpg" /&gt;
 &lt;img alt="" src="http://blog.kragniz.eu/images/kitty.jpg" /&gt;
 &lt;p&gt;Old posts begin here:&lt;/p&gt;
-</summary></entry><entry><title>Controlling vagalume last.fm client using python</title><link href="http://blog.kragniz.eu/control-vagalume-from-python" rel="alternate"></link><updated>2010-06-01T18:09:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2010-06-01:control-vagalume-from-python</id><summary type="html">&lt;p&gt;I've recently been playing with the docky python bindings, and started by
+</summary></entry><entry><title>Controlling vagalume last.fm client using python</title><link href="http://blog.kragniz.eu/control-vagalume-from-python" rel="alternate"></link><published>2010-06-01T18:09:00+00:00</published><updated>2010-06-01T18:09:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2010-06-01:control-vagalume-from-python</id><summary type="html">&lt;p&gt;I've recently been playing with the docky python bindings, and started by
 writing a helper to interact with &lt;a class="reference external" href="http://vagalume.igalia.com/"&gt;Vagalume&lt;/a&gt;, a
 lightweight last.fm client (I later added it to &lt;a class="reference external" href="https://launchpad.net/vagalume-docky"&gt;a project on launchpad&lt;/a&gt;). The vagalume DBus methods and
 signals are mostly undocumented, but they can be found lurking around after a
 quick look at &lt;a class="reference external" href="http://gitorious.org/vagalume/vagalume/blobs/master/src/dbus.h"&gt;some of the source code&lt;/a&gt;.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;dbus&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;dbus&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;gobject&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;dbus.mainloop.glib&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;DBusGMainLoop&lt;/span&gt;
 
@@ -357,23 +357,23 @@ quick look at &lt;a class="reference external" href="http://gitorious.org/vagalu
         &lt;span class="n"&gt;dbus&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mainloop&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;glib&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DBusGMainLoop&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;set_as_default&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
         &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bus&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;dbus&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;SessionBus&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 
-        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;player&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bus&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_object&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;com.igalia.vagalume&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                                          &lt;span class="s"&gt;&amp;#39;/com/igalia/vagalume&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;player&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bus&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_object&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;com.igalia.vagalume&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+                                          &lt;span class="s1"&gt;&amp;#39;/com/igalia/vagalume&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
         &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bus&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_signal_receiver&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;song_changed&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                                     &lt;span class="n"&gt;dbus_interface&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;com.igalia.vagalume&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                                     &lt;span class="n"&gt;signal_name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;notify&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+                                     &lt;span class="n"&gt;dbus_interface&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;com.igalia.vagalume&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+                                     &lt;span class="n"&gt;signal_name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;notify&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
     &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;song_changed&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;args&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
         &lt;span class="n"&gt;state&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;args&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;state&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;stopped&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-            &lt;span class="c"&gt;#do something when the player is stopped&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;state&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;stopped&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="c1"&gt;#do something when the player is stopped&lt;/span&gt;
             &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;stopped&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-        &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="n"&gt;state&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;playing&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="n"&gt;state&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;playing&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
             &lt;span class="n"&gt;artist&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;args&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
             &lt;span class="n"&gt;title&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;args&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
             &lt;span class="n"&gt;album&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;args&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-            &lt;span class="c"&gt;#do something with the data here...&lt;/span&gt;
+            &lt;span class="c1"&gt;#do something with the data here...&lt;/span&gt;
             &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;playing&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;artist&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;album&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
     &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;stopped&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
@@ -384,10 +384,10 @@ quick look at &lt;a class="reference external" href="http://gitorious.org/vagalu
         &lt;span class="sd"&gt;&amp;#39;&amp;#39;&amp;#39;Run when new song is played&amp;#39;&amp;#39;&amp;#39;&lt;/span&gt;
         &lt;span class="k"&gt;pass&lt;/span&gt;
 
-&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;__main__&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;__main__&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
     &lt;span class="n"&gt;app&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Vagalume&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 
-    &lt;span class="c"&gt;# gtk mainloop can be used if you&amp;#39;re using this as part of a gtk app&lt;/span&gt;
+    &lt;span class="c1"&gt;# gtk mainloop can be used if you&amp;#39;re using this as part of a gtk app&lt;/span&gt;
     &lt;span class="n"&gt;mainloop&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;gobject&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;MainLoop&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;is_running&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
     &lt;span class="n"&gt;mainloop&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;run&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
@@ -397,17 +397,17 @@ vagalume. This checks whether the notification is due to vagalume starting a
 new song or stopping the current one and runs either &lt;tt class="docutils literal"&gt;self.stopped&lt;/tt&gt; or
 &lt;tt class="docutils literal"&gt;self.playing&lt;/tt&gt;. These two methods by default do nothing, so subclassing
 &lt;tt class="docutils literal"&gt;Vagalume&lt;/tt&gt; to make them do something useful is good:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;MyFancyVagalume&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Vagalume&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;MyFancyVagalume&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Vagalume&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
     &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;stopped&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-        &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;just stopped the beat&amp;#39;&lt;/span&gt;
+        &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;just stopped the beat&amp;#39;&lt;/span&gt;
 
     &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;playing&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;artist&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;album&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-        &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;now playing &amp;quot;&lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s"&gt;&amp;quot; by &lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;artist&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;now playing &amp;quot;&lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s1"&gt;&amp;quot; by &lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;artist&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;To interact with vagalume do something like:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;vagalume&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Vagalume&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;vagalume&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Vagalume&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 
-&lt;span class="c"&gt;# do anything you want with dbus&lt;/span&gt;
+&lt;span class="c1"&gt;# do anything you want with dbus&lt;/span&gt;
 &lt;span class="n"&gt;vagalume&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;player&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Play&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;span class="n"&gt;vagalume&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;player&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Skip&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;span class="n"&gt;vagalume&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;player&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;LoveTrack&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
@@ -417,7 +417,7 @@ new song or stopping the current one and runs either &lt;tt class="docutils lite
 &lt;p&gt;take a look at the source
 (&lt;a class="reference external" href="http://gitorious.org/vagalume/vagalume/blobs/master/src/dbus.h"&gt;http://gitorious.org/vagalume/vagalume/blobs/master/src/dbus.h&lt;/a&gt;) for all of the
 functions available&lt;/p&gt;
-</summary><category term="DBus"></category><category term="open source"></category><category term="programing"></category><category term="python"></category><category term="vagalume"></category></entry><entry><title>Grabbing screenshots as a Python Image Library Image type</title><link href="http://blog.kragniz.eu/screenshots-with-python-image-library" rel="alternate"></link><updated>2010-05-26T18:09:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2010-05-26:screenshots-with-python-image-library</id><summary type="html">&lt;p&gt;A couple of days ago I needed to take screenshots of my linux desktop's screen and
+</summary><category term="DBus"></category><category term="open source"></category><category term="programing"></category><category term="python"></category><category term="vagalume"></category></entry><entry><title>Grabbing screenshots as a Python Image Library Image type</title><link href="http://blog.kragniz.eu/screenshots-with-python-image-library" rel="alternate"></link><published>2010-05-26T18:09:00+00:00</published><updated>2010-05-26T18:09:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2010-05-26:screenshots-with-python-image-library</id><summary type="html">&lt;p&gt;A couple of days ago I needed to take screenshots of my linux desktop's screen and
 manipulate these captured images using Python Image Library (PIL). I wrote a
 small python class to do the work of taking the screenshot and returning a PIL
 &lt;tt class="docutils literal"&gt;Image&lt;/tt&gt; object for use in the rest of the system I was writing.&lt;/p&gt;
@@ -435,7 +435,7 @@ can copy each pixel into our buffer.&lt;/p&gt;
 that was the original aim. Luckily, there's &lt;tt class="docutils literal"&gt;Image.frombuffer&lt;/tt&gt; to do all the
 hard work when combined with &lt;tt class="docutils literal"&gt;Pixbuf.get_pixels()&lt;/tt&gt;.&lt;/p&gt;
 &lt;p&gt;Full code:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;Image&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nn"&gt;gtk&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;Image&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nn"&gt;gtk&lt;/span&gt;
 
 &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Screenshotter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;object&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
     &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
@@ -460,23 +460,23 @@ hard work when combined with &lt;tt class="docutils literal"&gt;Pixbuf.get_pixel
         &lt;span class="p"&gt;)&lt;/span&gt;
 
         &lt;span class="n"&gt;final_screengrab&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Image&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;frombuffer&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
-            &lt;span class="s"&gt;&amp;quot;RGB&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+            &lt;span class="s2"&gt;&amp;quot;RGB&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
             &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;img_width&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;img_height&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
             &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;screengrab&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_pixels&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt;
-            &lt;span class="s"&gt;&amp;quot;raw&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-            &lt;span class="s"&gt;&amp;quot;RGB&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+            &lt;span class="s2"&gt;&amp;quot;raw&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+            &lt;span class="s2"&gt;&amp;quot;RGB&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
             &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;screengrab&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_rowstride&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt;
             &lt;span class="mi"&gt;1&lt;/span&gt;
         &lt;span class="p"&gt;)&lt;/span&gt;
 
         &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;final_screengrab&lt;/span&gt;
 
-&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
     &lt;span class="n"&gt;screenshot&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Screenshotter&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
     &lt;span class="n"&gt;image&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;screenshot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;take&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
-</summary><category term="programing"></category><category term="python"></category><category term="python image library"></category></entry><entry><title>LaTeX in your system tray</title><link href="http://blog.kragniz.eu/taylortype" rel="alternate"></link><updated>2010-04-05T18:02:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2010-04-05:taylortype</id><summary type="html">&lt;p&gt;Whilst procrastinating on writing GCSE physics coursework, I thought it would
+</summary><category term="programing"></category><category term="python"></category><category term="python image library"></category></entry><entry><title>LaTeX in your system tray</title><link href="http://blog.kragniz.eu/taylortype" rel="alternate"></link><published>2010-04-05T18:02:00+00:00</published><updated>2010-04-05T18:02:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2010-04-05:taylortype</id><summary type="html">&lt;p&gt;Whilst procrastinating on writing GCSE physics coursework, I thought it would
 be neat to have LaTeX run in the background and notify you when the document
 you're working on contains errors.&lt;/p&gt;
 &lt;img alt="" src="http://blog.kragniz.eu/images/taylortype0.png" /&gt;
@@ -491,20 +491,20 @@ messages for both LaTeX and BibTeX.&lt;/p&gt;
 message notifications.&lt;/p&gt;
 &lt;p&gt;The project is on launchpad here: &lt;a class="reference external" href="https://launchpad.net/taylortype"&gt;https://launchpad.net/taylortype&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;There's a small site on sourceforge: &lt;a class="reference external" href="http://taylortype.sourceforge.net/"&gt;http://taylortype.sourceforge.net/&lt;/a&gt;&lt;/p&gt;
-</summary><category term="GPLv3"></category><category term="LaTeX"></category><category term="linux"></category><category term="open source"></category><category term="programing"></category><category term="python"></category><category term="taylortype"></category></entry><entry><title>Green/blue thing</title><link href="http://blog.kragniz.eu/green-blue-thing" rel="alternate"></link><updated>2010-04-04T21:24:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2010-04-04:green-blue-thing</id><summary type="html">&lt;iframe
+</summary><category term="GPLv3"></category><category term="LaTeX"></category><category term="linux"></category><category term="open source"></category><category term="programing"></category><category term="python"></category><category term="taylortype"></category></entry><entry><title>Green/blue thing</title><link href="http://blog.kragniz.eu/green-blue-thing" rel="alternate"></link><published>2010-04-04T21:24:00+00:00</published><updated>2010-04-04T21:24:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2010-04-04:green-blue-thing</id><summary type="html">&lt;iframe
 src="//player.vimeo.com/video/9220323?loop=1&amp;title=0&amp;byline=0&amp;portrait=0"
 width="676" height="500" frameborder="0" webkitallowfullscreen
-mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;</summary><category term="3d"></category><category term="blender"></category><category term="images"></category></entry><entry><title>Some fur</title><link href="http://blog.kragniz.eu/some-fur" rel="alternate"></link><updated>2009-11-30T18:14:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2009-11-30:some-fur</id><summary type="html">&lt;p&gt;Playing with fluffy things in blender.&lt;/p&gt;
+mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;</summary><category term="3d"></category><category term="blender"></category><category term="images"></category></entry><entry><title>Some fur</title><link href="http://blog.kragniz.eu/some-fur" rel="alternate"></link><published>2009-11-30T18:14:00+00:00</published><updated>2009-11-30T18:14:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2009-11-30:some-fur</id><summary type="html">&lt;p&gt;Playing with fluffy things in blender.&lt;/p&gt;
 &lt;img alt="" src="http://blog.kragniz.eu/images/large-brute-beast-pic34.jpg" /&gt;
 &lt;img alt="" src="http://blog.kragniz.eu/images/large-brute-beast-pic35.jpg" /&gt;
 &lt;img alt="" src="http://blog.kragniz.eu/images/smallhairythingshot43.jpg" /&gt;
 &lt;img alt="" src="http://blog.kragniz.eu/images/smallhairythingshot53.jpg" /&gt;
-</summary><category term="3d"></category><category term="blender"></category><category term="images"></category></entry><entry><title>Low altitude flying craft</title><link href="http://blog.kragniz.eu/flying-thing" rel="alternate"></link><updated>2009-04-02T14:46:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2009-04-02:flying-thing</id><summary type="html">&lt;img alt="" src="http://blog.kragniz.eu/images/rocket-thing-pic-10.jpg" /&gt;
+</summary><category term="3d"></category><category term="blender"></category><category term="images"></category></entry><entry><title>Low altitude flying craft</title><link href="http://blog.kragniz.eu/flying-thing" rel="alternate"></link><published>2009-04-02T14:46:00+00:00</published><updated>2009-04-02T14:46:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2009-04-02:flying-thing</id><summary type="html">&lt;img alt="" src="http://blog.kragniz.eu/images/rocket-thing-pic-10.jpg" /&gt;
 &lt;img alt="" src="http://blog.kragniz.eu/images/rocket-thing-pic-16.jpg" /&gt;
 &lt;img alt="" src="http://blog.kragniz.eu/images/rocket-thing-pic-19.jpg" /&gt;
 &lt;iframe
 src="//player.vimeo.com/video/9167617?loop=1&amp;title=0&amp;byline=0&amp;portrait=0"
 width="627" height="400" frameborder="0" webkitallowfullscreen
-mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;</summary><category term="3d"></category><category term="blender"></category><category term="images"></category></entry><entry><title>Hoop machine</title><link href="http://blog.kragniz.eu/hoop-machine" rel="alternate"></link><updated>2009-01-28T22:04:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2009-01-28:hoop-machine</id><summary type="html">&lt;p&gt;Modeled in &lt;a class="reference external" href="http://www.blender.org/"&gt;Blender&lt;/a&gt; and rendered in &lt;a class="reference external" href="www.kerkythea.net"&gt;Kerkythea&lt;/a&gt;.&lt;/p&gt;
+mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;</summary><category term="3d"></category><category term="blender"></category><category term="images"></category></entry><entry><title>Hoop machine</title><link href="http://blog.kragniz.eu/hoop-machine" rel="alternate"></link><published>2009-01-28T22:04:00+00:00</published><updated>2009-01-28T22:04:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2009-01-28:hoop-machine</id><summary type="html">&lt;p&gt;Modeled in &lt;a class="reference external" href="http://www.blender.org/"&gt;Blender&lt;/a&gt; and rendered in &lt;a class="reference external" href="www.kerkythea.net"&gt;Kerkythea&lt;/a&gt;.&lt;/p&gt;
 &lt;img alt="" src="http://blog.kragniz.eu/images/hoopmachine6.jpg" /&gt;
 </summary><category term="3d"></category><category term="blender"></category><category term="images"></category></entry></feed>
