@@ -15,37 +15,26 @@
   <meta name="author" content="Louis Taylor">
   <meta name="description" content="Posts and writings by Louis Taylor">
 
-  <link href="http://blog.kragniz.eu/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="blog.kragniz.eu Atom" />
+  <link href="https://blog.kragniz.eu/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="blog.kragniz.eu Atom" />
 
 
   <title>
     blog.kragniz.eu
 &ndash; Tag: centos  </title>
 
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-59782204-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
 </head>
 
 <body>
   <aside>
     <div id="user_meta">
       <a href="..">
-        <img src="http://blog.kragniz.eu/images/me2_cropped.png" alt="logo">
+        <img src="https://blog.kragniz.eu/images/me2_cropped.png" alt="logo">
       </a>
       <h2><a href="..">Louis Taylor</a></h2>
       <p>ミ๏ｖ๏彡</p>
       <ul>
-        <li><a href="http://github.com/kragniz" target="_blank">Github</a></li>
-        <li><a href="https://twitter.com/kragniz" target="_blank">Twitter</a></li>
+        <li><a href="https://github.com/kragniz" target="_blank">GitHub</a></li>
+        <li><a href="https://chaos.social/@kgz" target="_blank">fedi</a></li>
       </ul>
     </div>
   </aside>
@@ -87,73 +76,73 @@ will invoke rpmbuild and build the package in place. The makes the kernel patch
 to distributable package a single step.</p>
 <p>As an example, creating a package from a patch file:</p>
 <pre class="code bash literal-block">
-<span class="o">[</span>vagrant&#64;localhost ~<span class="o">]</span>$ kpatch-package-builder -b livepatch-test.patch
-kpatch-package-builder: generating spec file...
-kpatch-package-builder: building RPM...
-kpatch-package-builder: writing spec file to /tmp/kpatch_3I6mHJ.spec...
-kpatch-package-builder: writing kpatch-module-livepatch-test-1-1.x86_64.rpm...
+<span class="o">[</span>vagrant&#64;localhost<span class="w"> </span>~<span class="o">]</span>$<span class="w"> </span>kpatch-package-builder<span class="w"> </span>-b<span class="w"> </span>livepatch-test.patch<span class="w">
+</span>kpatch-package-builder:<span class="w"> </span>generating<span class="w"> </span>spec<span class="w"> </span>file...<span class="w">
+</span>kpatch-package-builder:<span class="w"> </span>building<span class="w"> </span>RPM...<span class="w">
+</span>kpatch-package-builder:<span class="w"> </span>writing<span class="w"> </span>spec<span class="w"> </span>file<span class="w"> </span>to<span class="w"> </span>/tmp/kpatch_3I6mHJ.spec...<span class="w">
+</span>kpatch-package-builder:<span class="w"> </span>writing<span class="w"> </span>kpatch-module-livepatch-test-1-1.x86_64.rpm...
 </pre>
 <p>The default metadata associated with that generated package:</p>
 <pre class="code bash literal-block">
-<span class="o">[</span>vagrant&#64;localhost ~<span class="o">]</span>$ rpm -qip kpatch-module-livepatch-test-1-1.x86_64.rpm
-Name        : kpatch-module-livepatch-test
-Version     : 1
-Release     : 1
-Architecture: x86_64
-Install Date: <span class="o">(</span>not installed<span class="o">)</span>
-Group       : System Environment/Kernel
-Size        : 281661
-License     : GPLv2
-Signature   : <span class="o">(</span>none<span class="o">)</span>
-Source RPM  : kpatch-module-livepatch-test-1-1.src.rpm
-Build Date  : Wed <span class="m">24</span> Jun <span class="m">2015</span> 15:26:46 EDT
-Build Host  : localhost
-Relocations : <span class="o">(</span>not relocatable<span class="o">)</span>
-Summary     : kpatch livepatch module
-Description :
-Package generated from livepatch-test.patch by kpatch-package-builder
+<span class="o">[</span>vagrant&#64;localhost<span class="w"> </span>~<span class="o">]</span>$<span class="w"> </span>rpm<span class="w"> </span>-qip<span class="w"> </span>kpatch-module-livepatch-test-1-1.x86_64.rpm<span class="w">
+</span>Name<span class="w">        </span>:<span class="w"> </span>kpatch-module-livepatch-test<span class="w">
+</span>Version<span class="w">     </span>:<span class="w"> </span><span class="m">1</span><span class="w">
+</span>Release<span class="w">     </span>:<span class="w"> </span><span class="m">1</span><span class="w">
+</span>Architecture:<span class="w"> </span>x86_64<span class="w">
+</span>Install<span class="w"> </span>Date:<span class="w"> </span><span class="o">(</span>not<span class="w"> </span>installed<span class="o">)</span><span class="w">
+</span>Group<span class="w">       </span>:<span class="w"> </span>System<span class="w"> </span>Environment/Kernel<span class="w">
+</span>Size<span class="w">        </span>:<span class="w"> </span><span class="m">281661</span><span class="w">
+</span>License<span class="w">     </span>:<span class="w"> </span>GPLv2<span class="w">
+</span>Signature<span class="w">   </span>:<span class="w"> </span><span class="o">(</span>none<span class="o">)</span><span class="w">
+</span>Source<span class="w"> </span>RPM<span class="w">  </span>:<span class="w"> </span>kpatch-module-livepatch-test-1-1.src.rpm<span class="w">
+</span>Build<span class="w"> </span>Date<span class="w">  </span>:<span class="w"> </span>Wed<span class="w"> </span><span class="m">24</span><span class="w"> </span>Jun<span class="w"> </span><span class="m">2015</span><span class="w"> </span><span class="m">15</span>:26:46<span class="w"> </span>EDT<span class="w">
+</span>Build<span class="w"> </span>Host<span class="w">  </span>:<span class="w"> </span>localhost<span class="w">
+</span>Relocations<span class="w"> </span>:<span class="w"> </span><span class="o">(</span>not<span class="w"> </span>relocatable<span class="o">)</span><span class="w">
+</span>Summary<span class="w">     </span>:<span class="w"> </span>kpatch<span class="w"> </span>livepatch<span class="w"> </span>module<span class="w">
+</span>Description<span class="w"> </span>:<span class="w">
+</span>Package<span class="w"> </span>generated<span class="w"> </span>from<span class="w"> </span>livepatch-test.patch<span class="w"> </span>by<span class="w"> </span>kpatch-package-builder
 </pre>
 <p>The contents of the package:</p>
 <pre class="code bash literal-block">
-<span class="o">[</span>vagrant&#64;localhost ~<span class="o">]</span>$ rpm -qlp kpatch-module-livepatch-test-1-1.x86_64.rpm
-/var/lib/kpatch/3.10.0-229.el7.x86_64/kpatch-livepatch-test.ko
+<span class="o">[</span>vagrant&#64;localhost<span class="w"> </span>~<span class="o">]</span>$<span class="w"> </span>rpm<span class="w"> </span>-qlp<span class="w"> </span>kpatch-module-livepatch-test-1-1.x86_64.rpm<span class="w">
+</span>/var/lib/kpatch/3.10.0-229.el7.x86_64/kpatch-livepatch-test.ko
 </pre>
 <p>The current options available:</p>
 <pre class="code bash literal-block">
-<span class="o">[</span>vagrant&#64;localhost ~<span class="o">]</span>$ kpatch-package-builder -h
-usage: kpatch-package-builder <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-v<span class="o">]</span> <span class="o">[</span>-o FILE <span class="p">|</span> -b<span class="o">]</span> <span class="o">[</span>-k VERSION<span class="o">]</span> <span class="o">[</span>-a ARCH<span class="o">]</span>
-                              <span class="o">[</span>--set-release NUM<span class="o">]</span> <span class="o">[</span>--set-version NUM<span class="o">]</span> <span class="o">[</span>-d<span class="o">]</span>
-                              PATCH
+<span class="o">[</span>vagrant&#64;localhost<span class="w"> </span>~<span class="o">]</span>$<span class="w"> </span>kpatch-package-builder<span class="w"> </span>-h<span class="w">
+</span>usage:<span class="w"> </span>kpatch-package-builder<span class="w"> </span><span class="o">[</span>-h<span class="o">]</span><span class="w"> </span><span class="o">[</span>-v<span class="o">]</span><span class="w"> </span><span class="o">[</span>-o<span class="w"> </span>FILE<span class="w"> </span><span class="p">|</span><span class="w"> </span>-b<span class="o">]</span><span class="w"> </span><span class="o">[</span>-k<span class="w"> </span>VERSION<span class="o">]</span><span class="w"> </span><span class="o">[</span>-a<span class="w"> </span>ARCH<span class="o">]</span><span class="w">
+                              </span><span class="o">[</span>--set-release<span class="w"> </span>NUM<span class="o">]</span><span class="w"> </span><span class="o">[</span>--set-version<span class="w"> </span>NUM<span class="o">]</span><span class="w"> </span><span class="o">[</span>-d<span class="o">]</span><span class="w">
+                              </span>PATCH<span class="w">
 
-Build an RPM package or an RPM spec file to install and manage a kpatch
-livepatch module.
+</span>Build<span class="w"> </span>an<span class="w"> </span>RPM<span class="w"> </span>package<span class="w"> </span>or<span class="w"> </span>an<span class="w"> </span>RPM<span class="w"> </span>spec<span class="w"> </span>file<span class="w"> </span>to<span class="w"> </span>install<span class="w"> </span>and<span class="w"> </span>manage<span class="w"> </span>a<span class="w"> </span>kpatch<span class="w">
+</span>livepatch<span class="w"> </span>module.<span class="w">
 
-positional arguments:
-  PATCH                 patch file from which to build the livepatch module
+</span>positional<span class="w"> </span>arguments:<span class="w">
+  </span>PATCH<span class="w">                 </span>patch<span class="w"> </span>file<span class="w"> </span>from<span class="w"> </span>which<span class="w"> </span>to<span class="w"> </span>build<span class="w"> </span>the<span class="w"> </span>livepatch<span class="w"> </span>module<span class="w">
 
-optional arguments:
-  -h, --help            show this <span class="nb">help</span> message and <span class="nb">exit</span>
-  -v, --version         show program<span class="err">'</span>s version number and <span class="nb">exit</span>
-  -o FILE, --output FILE
-                        name of output spec file
-  -b, --build-rpm       build an RPM package
-  -k VERSION, --kernel VERSION
-                        target kernel version to build the livepatch module
-                        against. Defaults to the currently running version
-  -a ARCH, --arch ARCH  architecture to compile the patch against
-  --set-release NUM     package release version
-  --set-version NUM     package version number
-  -d, --debug           print debug information
+</span>optional<span class="w"> </span>arguments:<span class="w">
+  </span>-h,<span class="w"> </span>--help<span class="w">            </span>show<span class="w"> </span>this<span class="w"> </span><span class="nb">help</span><span class="w"> </span>message<span class="w"> </span>and<span class="w"> </span><span class="nb">exit</span><span class="w">
+  </span>-v,<span class="w"> </span>--version<span class="w">         </span>show<span class="w"> </span>program<span class="err">'</span>s<span class="w"> </span>version<span class="w"> </span>number<span class="w"> </span>and<span class="w"> </span><span class="nb">exit</span><span class="w">
+  </span>-o<span class="w"> </span>FILE,<span class="w"> </span>--output<span class="w"> </span>FILE<span class="w">
+                        </span>name<span class="w"> </span>of<span class="w"> </span>output<span class="w"> </span>spec<span class="w"> </span>file<span class="w">
+  </span>-b,<span class="w"> </span>--build-rpm<span class="w">       </span>build<span class="w"> </span>an<span class="w"> </span>RPM<span class="w"> </span>package<span class="w">
+  </span>-k<span class="w"> </span>VERSION,<span class="w"> </span>--kernel<span class="w"> </span>VERSION<span class="w">
+                        </span>target<span class="w"> </span>kernel<span class="w"> </span>version<span class="w"> </span>to<span class="w"> </span>build<span class="w"> </span>the<span class="w"> </span>livepatch<span class="w"> </span>module<span class="w">
+                        </span>against.<span class="w"> </span>Defaults<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>currently<span class="w"> </span>running<span class="w"> </span>version<span class="w">
+  </span>-a<span class="w"> </span>ARCH,<span class="w"> </span>--arch<span class="w"> </span>ARCH<span class="w">  </span>architecture<span class="w"> </span>to<span class="w"> </span>compile<span class="w"> </span>the<span class="w"> </span>patch<span class="w"> </span>against<span class="w">
+  </span>--set-release<span class="w"> </span>NUM<span class="w">     </span>package<span class="w"> </span>release<span class="w"> </span>version<span class="w">
+  </span>--set-version<span class="w"> </span>NUM<span class="w">     </span>package<span class="w"> </span>version<span class="w"> </span>number<span class="w">
+  </span>-d,<span class="w"> </span>--debug<span class="w">           </span>print<span class="w"> </span>debug<span class="w"> </span>information<span class="w">
 
-Usage examples:
+</span>Usage<span class="w"> </span>examples:<span class="w">
 
-Build an RPM package <span class="k">for</span> a given patch:
+</span>Build<span class="w"> </span>an<span class="w"> </span>RPM<span class="w"> </span>package<span class="w"> </span><span class="k">for</span><span class="w"> </span>a<span class="w"> </span>given<span class="w"> </span>patch:<span class="w">
 
-    $ kpatch-package-builder --build-rpm module.patch
+    </span>$<span class="w"> </span>kpatch-package-builder<span class="w"> </span>--build-rpm<span class="w"> </span>module.patch<span class="w">
 
-Generate a spec file to later build into an RPM:
+</span>Generate<span class="w"> </span>a<span class="w"> </span>spec<span class="w"> </span>file<span class="w"> </span>to<span class="w"> </span>later<span class="w"> </span>build<span class="w"> </span>into<span class="w"> </span>an<span class="w"> </span>RPM:<span class="w">
 
-    $ kpatch-package-builder --output module.spec module.patch
+    </span>$<span class="w"> </span>kpatch-package-builder<span class="w"> </span>--output<span class="w"> </span>module.spec<span class="w"> </span>module.patch
 </pre>
 <p>If you want to test this or use it yourself, the code lives at <a class="reference external" href="https://github.com/centos-livepatching/kpatch-package-builder">https://github.com/centos-livepatching/kpatch-package-builder</a>.</p>
 <div class="section" id="future-work">

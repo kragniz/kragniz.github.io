@@ -15,43 +15,183 @@
   <meta name="author" content="Louis Taylor">
   <meta name="description" content="Posts and writings by Louis Taylor">
 
-  <link href="http://blog.kragniz.eu/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="blog.kragniz.eu Atom" />
+  <link href="https://blog.kragniz.eu/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="blog.kragniz.eu Atom" />
 
 
   <title>
     blog.kragniz.eu
 &ndash; Posts by: Louis Taylor  </title>
 
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-59782204-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
 </head>
 
 <body>
   <aside>
     <div id="user_meta">
       <a href="..">
-        <img src="http://blog.kragniz.eu/images/me2_cropped.png" alt="logo">
+        <img src="https://blog.kragniz.eu/images/me2_cropped.png" alt="logo">
       </a>
       <h2><a href="..">Louis Taylor</a></h2>
       <p>ミ๏ｖ๏彡</p>
       <ul>
-        <li><a href="http://github.com/kragniz" target="_blank">Github</a></li>
-        <li><a href="https://twitter.com/kragniz" target="_blank">Twitter</a></li>
+        <li><a href="https://github.com/kragniz" target="_blank">GitHub</a></li>
+        <li><a href="https://chaos.social/@kgz" target="_blank">fedi</a></li>
       </ul>
     </div>
   </aside>
 
   <main>
 
+<article>
+  <div class="article_title">
+    <h3><a href="../control-vagalume-from-python">Controlling vagalume last.fm client using python</a></h3>
+  </div>
+  <div class="article_text">
+    <p>I've recently been playing with the docky python bindings, and started by
+writing a helper to interact with <a class="reference external" href="http://vagalume.igalia.com/">Vagalume</a>, a
+lightweight last.fm client (I later added it to <a class="reference external" href="https://launchpad.net/vagalume-docky">a project on launchpad</a>). The vagalume DBus methods and
+signals are mostly undocumented, but they can be found lurking around after a
+quick look at <a class="reference external" href="http://gitorious.org/vagalume/vagalume/blobs/master/src/dbus.h">some of the source code</a>.</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dbus</span>
+<span class="kn">import</span> <span class="nn">gobject</span>
+<span class="kn">from</span> <span class="nn">dbus.mainloop.glib</span> <span class="kn">import</span> <span class="n">DBusGMainLoop</span>
+
+<span class="k">class</span> <span class="nc">Vagalume</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dbus</span><span class="o">.</span><span class="n">mainloop</span><span class="o">.</span><span class="n">glib</span><span class="o">.</span><span class="n">DBusGMainLoop</span><span class="p">(</span><span class="n">set_as_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bus</span> <span class="o">=</span> <span class="n">dbus</span><span class="o">.</span><span class="n">SessionBus</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bus</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="s1">&#39;com.igalia.vagalume&#39;</span><span class="p">,</span>
+                                          <span class="s1">&#39;/com/igalia/vagalume&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bus</span><span class="o">.</span><span class="n">add_signal_receiver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">song_changed</span><span class="p">,</span>
+                                     <span class="n">dbus_interface</span><span class="o">=</span><span class="s1">&#39;com.igalia.vagalume&#39;</span><span class="p">,</span>
+                                     <span class="n">signal_name</span><span class="o">=</span><span class="s1">&#39;notify&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">song_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">state</span> <span class="o">==</span> <span class="s1">&#39;stopped&#39;</span><span class="p">:</span>
+            <span class="c1">#do something when the player is stopped</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stopped</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">state</span> <span class="o">==</span> <span class="s1">&#39;playing&#39;</span><span class="p">:</span>
+            <span class="n">artist</span> <span class="o">=</span> <span class="n">args</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="n">args</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">album</span> <span class="o">=</span> <span class="n">args</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+            <span class="c1">#do something with the data here...</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">playing</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">album</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">stopped</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;Run when music is stopped&#39;&#39;&#39;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">playing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">artist</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">album</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;Run when new song is played&#39;&#39;&#39;</span>
+        <span class="k">pass</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">Vagalume</span><span class="p">()</span>
+
+    <span class="c1"># gtk mainloop can be used if you&#39;re using this as part of a gtk app</span>
+    <span class="n">mainloop</span> <span class="o">=</span> <span class="n">gobject</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">(</span><span class="n">is_running</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">mainloop</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+<p>You'll probably notice the method <tt class="docutils literal">song_changed</tt>. This is a method which is
+registered with DBus and run each time the <tt class="docutils literal">'notify'</tt> signal is emitted from
+vagalume. This checks whether the notification is due to vagalume starting a
+new song or stopping the current one and runs either <tt class="docutils literal">self.stopped</tt> or
+<tt class="docutils literal">self.playing</tt>. These two methods by default do nothing, so subclassing
+<tt class="docutils literal">Vagalume</tt> to make them do something useful is good:</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyFancyVagalume</span><span class="p">(</span><span class="n">Vagalume</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">stopped</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span> <span class="s1">&#39;just stopped the beat&#39;</span>
+
+    <span class="k">def</span> <span class="nf">playing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">artist</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">album</span><span class="p">):</span>
+        <span class="nb">print</span> <span class="s1">&#39;now playing &quot;</span><span class="si">%s</span><span class="s1">&quot; by </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">artist</span><span class="p">)</span>
+</pre></div>
+<p>To interact with vagalume do something like:</p>
+<div class="highlight"><pre><span></span><span class="n">vagalume</span> <span class="o">=</span> <span class="n">Vagalume</span><span class="p">()</span>
+
+<span class="c1"># do anything you want with dbus</span>
+<span class="n">vagalume</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">Play</span><span class="p">()</span>
+<span class="n">vagalume</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">Skip</span><span class="p">()</span>
+<span class="n">vagalume</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">LoveTrack</span><span class="p">()</span>
+<span class="n">vagalume</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">BanTrack</span><span class="p">()</span>
+<span class="n">vagalume</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">Stop</span><span class="p">()</span>
+</pre></div>
+<p>take a look at the source
+(<a class="reference external" href="http://gitorious.org/vagalume/vagalume/blobs/master/src/dbus.h">http://gitorious.org/vagalume/vagalume/blobs/master/src/dbus.h</a>) for all of the
+functions available</p>
+
+  </div>
+</article>
+<hr />
+<article>
+  <div class="article_title">
+    <h3><a href="../screenshots-with-python-image-library">Grabbing screenshots as a Python Image Library <tt class="docutils literal">Image</tt> type</a></h3>
+  </div>
+  <div class="article_text">
+    <p>A couple of days ago I needed to take screenshots of my linux desktop's screen and
+manipulate these captured images using Python Image Library (PIL). I wrote a
+small python class to do the work of taking the screenshot and returning a PIL
+<tt class="docutils literal">Image</tt> object for use in the rest of the system I was writing.</p>
+<p>The code ended up being simpler than I expected, mostly because <a class="reference external" href="http://en.wikipedia.org/wiki/GDK">GDK</a>, the library used as an intermediary
+between GTK and the low-level window manager and display server commands, does
+all the heavy lifting.</p>
+<div class="section" id="method">
+<h2>Method</h2>
+<p>I wanted to take many screenshots during a run of the program I was writing, so
+allocated a persistent <tt class="docutils literal">gtk.gdk.Pixbuf</tt> object to store the captured image
+in. This object has a handy <tt class="docutils literal">get_from_drawable</tt> method. Of course, the X11
+root window is a drawable, so by using <tt class="docutils literal">gtk.gdk.get_default_root_window()</tt> we
+can copy each pixel into our buffer.</p>
+<p>Once the <tt class="docutils literal">Pixbuf</tt> is full, an <tt class="docutils literal">Image</tt> needs to be created from it, since
+that was the original aim. Luckily, there's <tt class="docutils literal">Image.frombuffer</tt> to do all the
+hard work when combined with <tt class="docutils literal">Pixbuf.get_pixels()</tt>.</p>
+<p>Full code:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">Image</span><span class="o">,</span> <span class="nn">gtk</span>
+
+<span class="k">class</span> <span class="nc">Screenshotter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">img_width</span> <span class="o">=</span> <span class="n">gtk</span><span class="o">.</span><span class="n">gdk</span><span class="o">.</span><span class="n">screen_width</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">img_height</span> <span class="o">=</span> <span class="n">gtk</span><span class="o">.</span><span class="n">gdk</span><span class="o">.</span><span class="n">screen_height</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">screengrab</span> <span class="o">=</span> <span class="n">gtk</span><span class="o">.</span><span class="n">gdk</span><span class="o">.</span><span class="n">Pixbuf</span><span class="p">(</span>
+            <span class="n">gtk</span><span class="o">.</span><span class="n">gdk</span><span class="o">.</span><span class="n">COLORSPACE_RGB</span><span class="p">,</span>
+            <span class="kc">False</span><span class="p">,</span>
+            <span class="mi">8</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">img_width</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">img_height</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">take</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screengrab</span><span class="o">.</span><span class="n">get_from_drawable</span><span class="p">(</span>
+            <span class="n">gtk</span><span class="o">.</span><span class="n">gdk</span><span class="o">.</span><span class="n">get_default_root_window</span><span class="p">(),</span>
+            <span class="n">gtk</span><span class="o">.</span><span class="n">gdk</span><span class="o">.</span><span class="n">colormap_get_system</span><span class="p">(),</span>
+            <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">img_width</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">img_height</span>
+        <span class="p">)</span>
+
+        <span class="n">final_screengrab</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span>
+            <span class="s2">&quot;RGB&quot;</span><span class="p">,</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_height</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screengrab</span><span class="o">.</span><span class="n">get_pixels</span><span class="p">(),</span>
+            <span class="s2">&quot;raw&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;RGB&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screengrab</span><span class="o">.</span><span class="n">get_rowstride</span><span class="p">(),</span>
+            <span class="mi">1</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">final_screengrab</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">screenshot</span> <span class="o">=</span> <span class="n">Screenshotter</span><span class="p">()</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">screenshot</span><span class="o">.</span><span class="n">take</span><span class="p">()</span>
+</pre></div>
+</div>
+
+  </div>
+</article>
+<hr />
 <article>
   <div class="article_title">
     <h3><a href="../taylortype">LaTeX in your system tray</a></h3>
@@ -87,49 +227,10 @@ width="676" height="500" frameborder="0" webkitallowfullscreen
 mozallowfullscreen allowfullscreen></iframe>
   </div>
 </article>
-<hr />
-<article>
-  <div class="article_title">
-    <h3><a href="../some-fur">Some fur</a></h3>
-  </div>
-  <div class="article_text">
-    <p>Playing with fluffy things in blender.</p>
-<img alt="" src="../images/large-brute-beast-pic34.jpg" />
-<img alt="" src="../images/large-brute-beast-pic35.jpg" />
-<img alt="" src="../images/smallhairythingshot43.jpg" />
-<img alt="" src="../images/smallhairythingshot53.jpg" />
-
-  </div>
-</article>
-<hr />
-<article>
-  <div class="article_title">
-    <h3><a href="../flying-thing">Low altitude flying craft</a></h3>
-  </div>
-  <div class="article_text">
-    <img alt="" src="../images/rocket-thing-pic-10.jpg" />
-<img alt="" src="../images/rocket-thing-pic-16.jpg" />
-<img alt="" src="../images/rocket-thing-pic-19.jpg" />
-<iframe
-src="//player.vimeo.com/video/9167617?loop=1&title=0&byline=0&portrait=0"
-width="627" height="400" frameborder="0" webkitallowfullscreen
-mozallowfullscreen allowfullscreen></iframe>
-  </div>
-</article>
-<hr />
-<article>
-  <div class="article_title">
-    <h3><a href="../hoop-machine">Hoop machine</a></h3>
-  </div>
-  <div class="article_text">
-    <p>Modeled in <a class="reference external" href="http://www.blender.org/">Blender</a> and rendered in <a class="reference external" href="www.kerkythea.net">Kerkythea</a>.</p>
-<img alt="" src="../images/hoopmachine6.jpg" />
-
-  </div>
-</article>
 
 <footer>
 <div id="paginator">
+<a href="../author/louis-taylor3.html" class="button_accent">&larr; Older Posts</a>
 
 <a href="../author/louis-taylor.html" class="button_accent">Newer Posts &rarr;</a>
 </div>
