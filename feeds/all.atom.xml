@@ -1,5 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>blog.kragniz.eu</title><link href="https://blog.kragniz.eu/" rel="alternate"></link><link href="https://blog.kragniz.eu/feeds/all.atom.xml" rel="self"></link><id>https://blog.kragniz.eu/</id><updated>2016-01-22T22:23:00+00:00</updated><entry><title>Raspbian on Travis CI</title><link href="https://blog.kragniz.eu/raspbian-on-travis-ci" rel="alternate"></link><published>2016-01-22T22:23:00+00:00</published><updated>2016-01-22T22:23:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2016-01-22:/raspbian-on-travis-ci</id><content type="html">&lt;p&gt;For abersailbot, I've been working on automation of provisioning images to run
+<feed xmlns="http://www.w3.org/2005/Atom"><title>blog.kgz.sh</title><link href="https://blog.kgz.sh/" rel="alternate"></link><link href="https://blog.kgz.sh/feeds/all.atom.xml" rel="self"></link><id>https://blog.kgz.sh/</id><updated>2025-02-16T16:00:00+00:00</updated><entry><title>Lightning Lightning Talks at FOSDEM 2025</title><link href="https://blog.kgz.sh/fosdem-lightning-lightning-talks" rel="alternate"></link><published>2025-02-16T16:00:00+00:00</published><updated>2025-02-16T16:00:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kgz.sh,2025-02-16:/fosdem-lightning-lightning-talks</id><content type="html">&lt;p&gt;For the last few years I've been running the lightning talk track at
+&lt;a class="reference external" href="https://fosdem.org"&gt;FOSDEM&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This track contains a series of 15 minute talks separated by 5 minute breaks
+all day, a format which has been mostly unchanged since its first &lt;a class="reference external" href="https://archive.fosdem.org/2007/schedule/tracks/lightningtalks.html"&gt;introduction in
+2007&lt;/a&gt;, 18
+years ago:&lt;/p&gt;
+&lt;a class="reference external image-reference" href="https://archive.fosdem.org/2007/schedule/tracks/lightningtalks.html"&gt;
+&lt;img alt="Screenshot of FOSDEM 2007 lightning talk schedule" src="https://blog.kgz.sh/images/2007-lightning-talks.png" /&gt;
+&lt;/a&gt;
+&lt;p&gt;There are some advantages to this format:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;listing each talk in the schedule allows people to attend a single talk which interests them, then leave&lt;/li&gt;
+&lt;li&gt;5 minute gaps between talks allow for more tolerance towards technical difficulties&lt;/li&gt;
+&lt;li&gt;can be handled like any other talk in the program&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;And some (subjective) disadvantages:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;different from what people would expect &amp;quot;lightning talks&amp;quot; to mean compared to other events&lt;/li&gt;
+&lt;li&gt;15 minutes is actually quite a long time, and preparing a good talk of this length requires some effort&lt;/li&gt;
+&lt;li&gt;more effort makes it harder to spontaneously prepare a talk, and riskier to accept a hastily prepared talk into the schedule&lt;/li&gt;
+&lt;li&gt;some speakers prepare a talk which takes less than 15 minutes, so someone watching a series of talks might see 10 minutes of talk, followed by 10 minutes of gap before the next talk&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For better or for worse, the average talk length at FOSDEM has also been steadily decreasing over the years.
+If we extrapolate this trend into the future, talks in the current lightning
+talk track will at some point be longer than the average talk elsewhere!&lt;/p&gt;
+&lt;object data="https://blog.kgz.sh/images/fosdem-talk-length.svg" type="image/svg+xml"&gt;Plot of year and average talk length&lt;/object&gt;
+&lt;p&gt;This clearly makes the case for something which contains even more lightning
+than the usual lightning talks.&lt;/p&gt;
+&lt;p&gt;For FOSDEM 2025, I wanted to make something with the following goals:&lt;/p&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;A single session with no downtime&lt;/li&gt;
+&lt;li&gt;Felt spontaneous&lt;/li&gt;
+&lt;li&gt;Entertaining to watch&lt;/li&gt;
+&lt;li&gt;Low bar for entry&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Normally this kind of session at a conference would just be called &amp;quot;lightning
+talks&amp;quot;, but we already have the existing lightning talks track which wouldn't
+be changing this year.&lt;/p&gt;
+&lt;p&gt;Since the main difference between them is the quantity of lightning involved, I named it
+Lightning Lightning Talks instead.&lt;/p&gt;
+&lt;div class="section" id="the-software"&gt;
+&lt;h2&gt;The software&lt;/h2&gt;
+&lt;p&gt;To run this session, something needed to:&lt;/p&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;Let people submit talk proposals with slides attached&lt;/li&gt;
+&lt;li&gt;Review and accept some talks&lt;/li&gt;
+&lt;li&gt;On the day of the session, grab the slides for accepted talks&lt;/li&gt;
+&lt;li&gt;Display a title screen to make sure the right speaker starts speaking&lt;/li&gt;
+&lt;li&gt;Display presentation slides&lt;/li&gt;
+&lt;li&gt;Count how long a speaker has left&lt;/li&gt;
+&lt;li&gt;Move to the next talk once time has run out&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The first two points are covered by &lt;a class="reference external" href="https://github.com/pretalx/pretalx"&gt;pretalx&lt;/a&gt;, the tool used for all the normal
+proposal management at FOSDEM. The only complication was making it easy to get
+the list of accepted talks and the attached slides. This ended up being a new track in
+pretalx, and also a new proposal type to make filtering using the pretalx API
+possible.&lt;/p&gt;
+&lt;p&gt;A tool could then be written to query the API for the data about talks and
+write an intermediate config file describing the required info for the upcoming
+session. Since there's a much higher chance of changes at the last minute (for
+example some speakers not turning up), keeping the info for the session in a
+format which could be quickly edited by hand was important. It also removes a
+hard dependency on our pretalx deployment, so the session can run even if
+pretalx is down for some reason.&lt;/p&gt;
+&lt;p&gt;This file is a fairly unexciting &lt;tt class="docutils literal"&gt;.json&lt;/tt&gt; file, and looks about the same as you would expect:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Zagreb City case study: How to foster open data with public money&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;speakers&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Aleksandar Gavrilovic&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;slides_url&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;https://pretalx.fosdem.org/media/fosdem-2025/submissions/8NP3TN/resources/Zagreb_Ca_ryBYjbT.pdf&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;slides_name&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Zagreb_Ca_ryBYjbT.pdf&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;created&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;2025-01-20T09:32:48.352004+01:00&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="p"&gt;},&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;A Card Game for you techies&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;speakers&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Thierry Berger&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;slides_url&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;https://pretalx.fosdem.org/media/fosdem-2025/submissions/DXRMQC/resources/pitch_kln5nRa.pdf&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;slides_name&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;pitch_kln5nRa.pdf&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;quot;created&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;2025-01-28T09:29:02.942777+01:00&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;I wrote a custom presentation tool which reads this &lt;tt class="docutils literal"&gt;.json&lt;/tt&gt; and uses it to
+display a neat title screen for each talk followed by the slides provided by
+each speaker. This uses GTK for the main application and Pango + Cairo to
+render most of the graphics.&lt;/p&gt;
+&lt;p&gt;To annoy everyone equally (except LaTeX users) I required slides in &lt;tt class="docutils literal"&gt;.pdf&lt;/tt&gt;
+format, which meant I needed to render pages from them for the main
+presentation content. For this I used Poppler &lt;a class="footnote-reference" href="#footnote-1" id="footnote-reference-1"&gt;[1]&lt;/a&gt;, which ended up being pretty
+easy to implement (except for spending a bit too long figuring out why a
+particular presentation wasn't rendering correctly before I found out pdf
+documents could be transparent and I was rendering on a black background).&lt;/p&gt;
+&lt;p&gt;Most of the time developing this tool probably went into making the title
+screen look nice, with a pleasing ease in function (quint, &lt;span class="formula"&gt;1 − (1 − &lt;i&gt;t&lt;/i&gt;)&lt;sup&gt;5&lt;/sup&gt;&lt;/span&gt;)
+animating the FOSDEM cog pulling the title on to the screen:&lt;/p&gt;
+&lt;video autoplay loop muted playsinline&gt;
+  &lt;source src="https://blog.kgz.sh/images/lightninglightning-2025-02-09_15.09.38_1.webm" type="video/webm" /&gt;
+&lt;/video&gt;&lt;p&gt;A second window shows the time remaining for the current speaker, which can be displayed on a secondary monitor:&lt;/p&gt;
+&lt;video autoplay loop muted playsinline&gt;
+  &lt;source src="https://blog.kgz.sh/images/lightninglightning-countdown-2025-02-09_15.12.14_1.webm" type="video/webm" /&gt;
+&lt;/video&gt;&lt;p&gt;To make sure speakers don't overstay their welcome on the stage, the system
+needs to move them on. For lightning talks elsewhere, this is often done with a
+separate timer and social pressure to stop. Since this custom presentation tool
+knows how long the current speaker has taken and the order of talks, it can
+immediately start the next talk once the time has run out.&lt;/p&gt;
+&lt;p&gt;When the time left reaches 10 seconds, the countdown screen starts flashing in
+warning, while the presentation slides slowly fade out to the title screen and
+the next talk begins automatically:&lt;/p&gt;
+&lt;video autoplay loop muted playsinline&gt;
+  &lt;source src="https://blog.kgz.sh/images/lightninglightning-countdown-move-to-next-2025-02-09_15.23.33_1.webm" type="video/webm" /&gt;
+&lt;/video&gt;&lt;p&gt;Code for this tool is available at &lt;a class="reference external" href="https://github.com/kragniz/fosdem-lightning-talk-presenter"&gt;https://github.com/kragniz/fosdem-lightning-talk-presenter&lt;/a&gt;&lt;/p&gt;
+&lt;table class="docutils footnote" frame="void" id="footnote-1" rules="none"&gt;
+&lt;colgroup&gt;&lt;col class="label" /&gt;&lt;col /&gt;&lt;/colgroup&gt;
+&lt;tbody valign="top"&gt;
+&lt;tr&gt;&lt;td class="label"&gt;&lt;a class="fn-backref" href="#footnote-reference-1"&gt;[1]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;As luck would have it, there was a lightning talk at FOSDEM this year about Poppler: &lt;a class="reference external" href="https://fosdem.org/2025/schedule/event/fosdem-2025-6000-poppler-the-pdf-rendering-library/"&gt;https://fosdem.org/2025/schedule/event/fosdem-2025-6000-poppler-the-pdf-rendering-library/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;div class="section" id="people-logistics"&gt;
+&lt;h2&gt;People logistics&lt;/h2&gt;
+&lt;p&gt;Despite planning the actual presentation display and submission system, I
+hadn't fully planned the logistics of people moving around until the evening
+before the session. This meant quickly working out a system to make sure
+speakers could smoothly flow from one talk to the next.&lt;/p&gt;
+&lt;p&gt;With the help of some volunteers who were assisting with running the session on
+the day, we thought through a few options and settled with:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Printing off the talk schedule, and giving a copy to each speaker just in case the order is forgotten&lt;/li&gt;
+&lt;li&gt;Sitting speakers &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;n-3&lt;/span&gt;&lt;/tt&gt; in a row of audience seats in the same order as their position in the talk schedule&lt;/li&gt;
+&lt;li&gt;Using two seats at the side of the stage as a staging area (#1 containing the next speaker, and #2 containing the speaker after next)&lt;/li&gt;
+&lt;li&gt;Using two handheld microphones (one held by the current speaker, one held by the next speaker)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;On a talk ending, everybody swaps to a new position simultaneously:&lt;/p&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;Speaker leaves the stage, handing their microphone to the person in staging area seat #2&lt;/li&gt;
+&lt;li&gt;Person in the #1 staging area seat takes to the stage and begins their talk&lt;/li&gt;
+&lt;li&gt;Person in staging area seat #2 moves to seat #1&lt;/li&gt;
+&lt;li&gt;Person in the rightmost seat in the audience row moves to staging area seat #2&lt;/li&gt;
+&lt;li&gt;All other speakers sitting in the audience row move one seat to the right&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This ended up worked pretty smoothly. There was a contingency plan in case a
+speaker carried on talking after their time ran out involving a volunteer
+threateningly wielding a brush and sweeping them off the stage, which (somewhat
+unfortunately, since it would have been entertaining) never needed to be deployed.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="how-it-went"&gt;
+&lt;h2&gt;How it went&lt;/h2&gt;
+&lt;p&gt;I was really pleased with how this worked out in the end. Running a session
+which relied on custom presentation software and a large number of speakers had
+the potential for some unforeseen disaster, which had made me a bit anxious. No
+disasters took place, and feedback has been nice.&lt;/p&gt;
+&lt;p&gt;You can watch the recording here:&lt;/p&gt;
+&lt;a class="reference external image-reference" href="https://fosdem.org/2025/schedule/event/fosdem-2025-6674-lightning-lightning-talks/"&gt;
+&lt;img alt="Screenshot of FOSDEM 2007 lightning talk schedule" src="https://blog.kgz.sh/images/lightning-lightning-title.jpg" /&gt;
+&lt;/a&gt;
+&lt;p&gt;The talks were good. Someone was enthusiastic about isopods:&lt;/p&gt;
+&lt;blockquote class="mastodon-embed" data-embed-url="https://chaos.social/@whatareyoudoinginmyswamp/113947154552710824/embed" style="background: #FCF8FF; border-radius: 8px; border: 1px solid #C9C4DA; margin: 0; max-width: 540px; min-width: 270px; overflow: hidden; padding: 0;"&gt; &lt;a href="https://chaos.social/@whatareyoudoinginmyswamp/113947154552710824" target="_blank" style="align-items: center; color: #1C1A25; display: flex; flex-direction: column; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Roboto, sans-serif; font-size: 14px; justify-content: center; letter-spacing: 0.25px; line-height: 20px; padding: 24px; text-decoration: none;"&gt; &lt;svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 79 75"&gt;&lt;path d="M74.7135 16.6043C73.6199 8.54587 66.5351 2.19527 58.1366 0.964691C56.7196 0.756754 51.351 0 38.9148 0H38.822C26.3824 0 23.7135 0.756754 22.2966 0.964691C14.1319 2.16118 6.67571 7.86752 4.86669 16.0214C3.99657 20.0369 3.90371 24.4888 4.06535 28.5726C4.29578 34.4289 4.34049 40.275 4.877 46.1075C5.24791 49.9817 5.89495 53.8251 6.81328 57.6088C8.53288 64.5968 15.4938 70.4122 22.3138 72.7848C29.6155 75.259 37.468 75.6697 44.9919 73.971C45.8196 73.7801 46.6381 73.5586 47.4475 73.3063C49.2737 72.7302 51.4164 72.086 52.9915 70.9542C53.0131 70.9384 53.0308 70.9178 53.0433 70.8942C53.0558 70.8706 53.0628 70.8445 53.0637 70.8179V65.1661C53.0634 65.1412 53.0574 65.1167 53.0462 65.0944C53.035 65.0721 53.0189 65.0525 52.9992 65.0371C52.9794 65.0218 52.9564 65.011 52.9318 65.0056C52.9073 65.0002 52.8819 65.0003 52.8574 65.0059C48.0369 66.1472 43.0971 66.7193 38.141 66.7103C29.6118 66.7103 27.3178 62.6981 26.6609 61.0278C26.1329 59.5842 25.7976 58.0784 25.6636 56.5486C25.6622 56.5229 25.667 56.4973 25.6775 56.4738C25.688 56.4502 25.7039 56.4295 25.724 56.4132C25.7441 56.397 25.7678 56.3856 25.7931 56.3801C25.8185 56.3746 25.8448 56.3751 25.8699 56.3816C30.6101 57.5151 35.4693 58.0873 40.3455 58.086C41.5183 58.086 42.6876 58.086 43.8604 58.0553C48.7647 57.919 53.9339 57.6701 58.7591 56.7361C58.8794 56.7123 58.9998 56.6918 59.103 56.6611C66.7139 55.2124 73.9569 50.665 74.6929 39.1501C74.7204 38.6967 74.7892 34.4016 74.7892 33.9312C74.7926 32.3325 75.3085 22.5901 74.7135 16.6043ZM62.9996 45.3371H54.9966V25.9069C54.9966 21.8163 53.277 19.7302 49.7793 19.7302C45.9343 19.7302 44.0083 22.1981 44.0083 27.0727V37.7082H36.0534V27.0727C36.0534 22.1981 34.124 19.7302 30.279 19.7302C26.8019 19.7302 25.0651 21.8163 25.0617 25.9069V45.3371H17.0656V25.3172C17.0656 21.2266 18.1191 17.9769 20.2262 15.568C22.3998 13.1648 25.2509 11.9308 28.7898 11.9308C32.8859 11.9308 35.9812 13.492 38.0447 16.6111L40.036 19.9245L42.0308 16.6111C44.0943 13.492 47.1896 11.9308 51.2788 11.9308C54.8143 11.9308 57.6654 13.1648 59.8459 15.568C61.9529 17.9746 63.0065 21.2243 63.0065 25.3172L62.9996 45.3371Z" fill="currentColor"/&gt;&lt;/svg&gt; &lt;div style="color: #787588; margin-top: 16px;"&gt;Post by @whatareyoudoinginmyswamp@chaos.social&lt;/div&gt; &lt;div style="font-weight: 500;"&gt;View on Mastodon&lt;/div&gt; &lt;/a&gt; &lt;/blockquote&gt; &lt;script data-allowed-prefixes="https://chaos.social/" async src="https://chaos.social/embed.js"&gt;&lt;/script&gt;&lt;/div&gt;
+&lt;div class="section" id="future"&gt;
+&lt;h2&gt;Future&lt;/h2&gt;
+&lt;p&gt;I'd like to make some changes if we run something similar next time:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;I'd like to encourage more random and fun topics&lt;/li&gt;
+&lt;li&gt;5 minutes is still quite a long time! In a 50 minute session we can only fit
+10 talks if everyone takes the maximum time. Maybe next time the limit could
+be 3 minutes.&lt;/li&gt;
+&lt;li&gt;A bigger display showing the countdown visible from the audience would be nice&lt;/li&gt;
+&lt;li&gt;Make sure no mouse cursor is drawn over slides&lt;/li&gt;
+&lt;li&gt;The countdown should start as soon as the title screen is shown&lt;/li&gt;
+&lt;li&gt;A remote control to skip to the next presentation would be good, some
+speakers forgot to complete their slides all the way to the end, so the next
+speaker needed to skip forward a bit awkwardly&lt;/li&gt;
+&lt;li&gt;Shuffling all speakers one seat over was necessary because all the seats in
+this room have built in desks which make getting in and out of a row awkward
+unless you are sitting right at the end. Obtaining extra chairs to make an
+additional row of seats at the font would avoid needing to do this.&lt;/li&gt;
+&lt;li&gt;The submission process needs to be smoother. The extra track and submission
+type was confusing in the pretalx UI.&lt;/li&gt;
+&lt;li&gt;The submission deadline and status needs to be communicated better. I was
+originally worried about not getting enough proposals, but ended up getting
+too many. I closed submissions early since I didn't want people to spend time
+working on a presentation if all the spaces were taken, but this (quite
+rightfully) annoyed some people since they thought there would still be time
+to submit a talk&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I originally wanted to make talk order random out of a pool of people who
+registered as speakers before the session begins. However this felt a bit too
+risky for a first try. Perhaps some element of this could be introduced next
+time?&lt;/p&gt;
+&lt;p&gt;Hopefully Lightning Lightning Talks will return next time (maybe with a name change)!&lt;/p&gt;
+&lt;/div&gt;
+</content><category term="fosdem"></category><category term="fosdem"></category><category term="conferences"></category></entry><entry><title>Raspbian on Travis CI</title><link href="https://blog.kgz.sh/raspbian-on-travis-ci" rel="alternate"></link><published>2016-01-22T22:23:00+00:00</published><updated>2016-01-22T22:23:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kgz.sh,2016-01-22:/raspbian-on-travis-ci</id><content type="html">&lt;p&gt;For abersailbot, I've been working on automation of provisioning images to run
 on the main raspberry pi inside the boat. In the past, this has been a
 primitive bash script which installs packages and configurations files with a
 dubious amount of calls out to apt, cp and sed. Wanting to make this a little
@@ -202,7 +391,7 @@ BUG_REPORT_URL=&amp;quot;http://www.raspbian.org/RaspbianBugs&amp;quot;
 &lt;/pre&gt;
 &lt;p&gt;Now you have a little Raspbian VM booted on every commit. Run some ansible or
 puppet against it and you're done. Happy testing!&lt;/p&gt;
-</content><category term="raspberry-pi"></category><category term="raspbian"></category><category term="raspberry pi"></category><category term="qemu"></category></entry><entry><title>kpatch-package-builder 0.1.0</title><link href="https://blog.kragniz.eu/kpatch-package-builder" rel="alternate"></link><published>2015-06-29T22:23:00+01:00</published><updated>2015-06-29T22:23:00+01:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2015-06-29:/kpatch-package-builder</id><content type="html">&lt;p&gt;As part of &lt;a class="reference external" href="https://developers.google.com/open-source/gsoc/"&gt;Google Summer of Code&lt;/a&gt;, I've been working with the
+</content><category term="raspberry-pi"></category><category term="raspbian"></category><category term="raspberry pi"></category><category term="qemu"></category></entry><entry><title>kpatch-package-builder 0.1.0</title><link href="https://blog.kgz.sh/kpatch-package-builder" rel="alternate"></link><published>2015-06-29T22:23:00+01:00</published><updated>2015-06-29T22:23:00+01:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kgz.sh,2015-06-29:/kpatch-package-builder</id><content type="html">&lt;p&gt;As part of &lt;a class="reference external" href="https://developers.google.com/open-source/gsoc/"&gt;Google Summer of Code&lt;/a&gt;, I've been working with the
 CentOS project to create a delivery and build system to provide easy and
 automatic delivery of patches to a running linux kernel. CentOS 7 currently has
 support for live patching a running kernel (via the kpatch kernel module and
@@ -308,7 +497,7 @@ of patches across a set of kernel versions easy. This will be working on top of
 the basic kpatch-package-builder functionality to allow building many versions
 of packages for particular kernels.&lt;/p&gt;
 &lt;/div&gt;
-</content><category term="kpatch"></category><category term="kernel"></category><category term="centos"></category><category term="gsoc"></category><category term="kpatch"></category></entry><entry><title>Vagrant on fedora 21 and later</title><link href="https://blog.kragniz.eu/vagrant-fedora-21" rel="alternate"></link><published>2015-05-10T22:23:00+01:00</published><updated>2015-05-10T22:23:00+01:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2015-05-10:/vagrant-fedora-21</id><content type="html">&lt;p&gt;Vagrant is &lt;a class="reference external" href="https://bugzilla.redhat.com/show_bug.cgi?id=1020456"&gt;now packaged&lt;/a&gt; in Fedora 21 and later versions, which is great news.
+</content><category term="kpatch"></category><category term="kernel"></category><category term="centos"></category><category term="gsoc"></category><category term="kpatch"></category></entry><entry><title>Vagrant on fedora 21 and later</title><link href="https://blog.kgz.sh/vagrant-fedora-21" rel="alternate"></link><published>2015-05-10T22:23:00+01:00</published><updated>2015-05-10T22:23:00+01:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kgz.sh,2015-05-10:/vagrant-fedora-21</id><content type="html">&lt;p&gt;Vagrant is &lt;a class="reference external" href="https://bugzilla.redhat.com/show_bug.cgi?id=1020456"&gt;now packaged&lt;/a&gt; in Fedora 21 and later versions, which is great news.
 No more messing around with the horror of rvm!&lt;/p&gt;
 &lt;p&gt;After installing vagrant and the libvirt plugin with yum:&lt;/p&gt;
 &lt;pre class="literal-block"&gt;
@@ -337,13 +526,13 @@ $ rvm implode
 &lt;/pre&gt;
 &lt;p&gt;and everything will be happy, where happy is defined by vagrant running and
 having the fewest versions of ruby installed.&lt;/p&gt;
-</content><category term="fedora"></category><category term="fedora"></category><category term="vagrant"></category><category term="libvirt"></category></entry><entry><title>A brief five year interlude</title><link href="https://blog.kragniz.eu/interlude" rel="alternate"></link><published>2015-01-23T22:23:00+00:00</published><updated>2015-01-23T22:23:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2015-01-23:/interlude</id><content type="html">&lt;p&gt;I've since done my GCSE and A-level exams, and am now half way
+</content><category term="fedora"></category><category term="fedora"></category><category term="vagrant"></category><category term="libvirt"></category></entry><entry><title>A brief five year interlude</title><link href="https://blog.kgz.sh/interlude" rel="alternate"></link><published>2015-01-23T22:23:00+00:00</published><updated>2015-01-23T22:23:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kgz.sh,2015-01-23:/interlude</id><content type="html">&lt;p&gt;I've since done my GCSE and A-level exams, and am now half way
 through university.&lt;/p&gt;
 &lt;p&gt;Some sailing robots made with friends from my university:&lt;/p&gt;
-&lt;img alt="" src="https://blog.kragniz.eu/images/dewi.jpg" /&gt;
-&lt;img alt="" src="https://blog.kragniz.eu/images/kitty.jpg" /&gt;
+&lt;img alt="" src="https://blog.kgz.sh/images/dewi.jpg" /&gt;
+&lt;img alt="" src="https://blog.kgz.sh/images/kitty.jpg" /&gt;
 &lt;p&gt;Old posts begin here:&lt;/p&gt;
-</content><category term="things"></category></entry><entry><title>Controlling vagalume last.fm client using python</title><link href="https://blog.kragniz.eu/control-vagalume-from-python" rel="alternate"></link><published>2010-06-01T18:09:00+01:00</published><updated>2010-06-01T18:09:00+01:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2010-06-01:/control-vagalume-from-python</id><content type="html">&lt;p&gt;I've recently been playing with the docky python bindings, and started by
+</content><category term="things"></category></entry><entry><title>Controlling vagalume last.fm client using python</title><link href="https://blog.kgz.sh/control-vagalume-from-python" rel="alternate"></link><published>2010-06-01T18:09:00+01:00</published><updated>2010-06-01T18:09:00+01:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kgz.sh,2010-06-01:/control-vagalume-from-python</id><content type="html">&lt;p&gt;I've recently been playing with the docky python bindings, and started by
 writing a helper to interact with &lt;a class="reference external" href="http://vagalume.igalia.com/"&gt;Vagalume&lt;/a&gt;, a
 lightweight last.fm client (I later added it to &lt;a class="reference external" href="https://launchpad.net/vagalume-docky"&gt;a project on launchpad&lt;/a&gt;). The vagalume DBus methods and
 signals are mostly undocumented, but they can be found lurking around after a
@@ -417,7 +606,7 @@ new song or stopping the current one and runs either &lt;tt class="docutils lite
 &lt;p&gt;take a look at the source
 (&lt;a class="reference external" href="http://gitorious.org/vagalume/vagalume/blobs/master/src/dbus.h"&gt;http://gitorious.org/vagalume/vagalume/blobs/master/src/dbus.h&lt;/a&gt;) for all of the
 functions available&lt;/p&gt;
-</content><category term="python"></category><category term="DBus"></category><category term="open source"></category><category term="programing"></category><category term="python"></category><category term="vagalume"></category></entry><entry><title>Grabbing screenshots as a Python Image Library Image type</title><link href="https://blog.kragniz.eu/screenshots-with-python-image-library" rel="alternate"></link><published>2010-05-26T18:09:00+01:00</published><updated>2010-05-26T18:09:00+01:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2010-05-26:/screenshots-with-python-image-library</id><content type="html">&lt;p&gt;A couple of days ago I needed to take screenshots of my linux desktop's screen and
+</content><category term="python"></category><category term="DBus"></category><category term="open source"></category><category term="programing"></category><category term="python"></category><category term="vagalume"></category></entry><entry><title>Grabbing screenshots as a Python Image Library Image type</title><link href="https://blog.kgz.sh/screenshots-with-python-image-library" rel="alternate"></link><published>2010-05-26T18:09:00+01:00</published><updated>2010-05-26T18:09:00+01:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kgz.sh,2010-05-26:/screenshots-with-python-image-library</id><content type="html">&lt;p&gt;A couple of days ago I needed to take screenshots of my linux desktop's screen and
 manipulate these captured images using Python Image Library (PIL). I wrote a
 small python class to do the work of taking the screenshot and returning a PIL
 &lt;tt class="docutils literal"&gt;Image&lt;/tt&gt; object for use in the rest of the system I was writing.&lt;/p&gt;
@@ -476,35 +665,35 @@ hard work when combined with &lt;tt class="docutils literal"&gt;Pixbuf.get_pixel
     &lt;span class="n"&gt;image&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;screenshot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;take&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
-</content><category term="python"></category><category term="programing"></category><category term="python"></category><category term="python image library"></category></entry><entry><title>LaTeX in your system tray</title><link href="https://blog.kragniz.eu/taylortype" rel="alternate"></link><published>2010-04-05T18:02:00+01:00</published><updated>2010-04-05T18:02:00+01:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2010-04-05:/taylortype</id><content type="html">&lt;p&gt;Whilst procrastinating on writing GCSE physics coursework, I thought it would
+</content><category term="python"></category><category term="programing"></category><category term="python"></category><category term="python image library"></category></entry><entry><title>LaTeX in your system tray</title><link href="https://blog.kgz.sh/taylortype" rel="alternate"></link><published>2010-04-05T18:02:00+01:00</published><updated>2010-04-05T18:02:00+01:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kgz.sh,2010-04-05:/taylortype</id><content type="html">&lt;p&gt;Whilst procrastinating on writing GCSE physics coursework, I thought it would
 be neat to have LaTeX run in the background and notify you when the document
 you're working on contains errors.&lt;/p&gt;
-&lt;img alt="" src="https://blog.kragniz.eu/images/taylortype0.png" /&gt;
+&lt;img alt="" src="https://blog.kgz.sh/images/taylortype0.png" /&gt;
 &lt;p&gt;I wrote a python application which puts a small icon in the system tray. You
 can configure it to compile a LaTeX document.&lt;/p&gt;
 &lt;p&gt;It has a couple of settings for things like input file, output directory and
 automatic PDF opening (useful with evince, since opening refreshes the file if
 it is currently open in an existing evince window).  It supports simple error
 messages for both LaTeX and BibTeX.&lt;/p&gt;
-&lt;img alt="" src="https://blog.kragniz.eu/images/taylortype1.png" /&gt;
+&lt;img alt="" src="https://blog.kgz.sh/images/taylortype1.png" /&gt;
 &lt;p&gt;It uses GTK for the system tray icon, and libnotify to display the error
 message notifications.&lt;/p&gt;
 &lt;p&gt;The project is on launchpad here: &lt;a class="reference external" href="https://launchpad.net/taylortype"&gt;https://launchpad.net/taylortype&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;There's a small site on sourceforge: &lt;a class="reference external" href="http://taylortype.sourceforge.net/"&gt;http://taylortype.sourceforge.net/&lt;/a&gt;&lt;/p&gt;
-</content><category term="LaTeX, python"></category><category term="GPLv3"></category><category term="LaTeX"></category><category term="linux"></category><category term="open source"></category><category term="programing"></category><category term="python"></category><category term="taylortype"></category></entry><entry><title>Green/blue thing</title><link href="https://blog.kragniz.eu/green-blue-thing" rel="alternate"></link><published>2010-04-04T21:24:00+01:00</published><updated>2010-04-04T21:24:00+01:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2010-04-04:/green-blue-thing</id><content type="html">&lt;iframe
+</content><category term="LaTeX, python"></category><category term="GPLv3"></category><category term="LaTeX"></category><category term="linux"></category><category term="open source"></category><category term="programing"></category><category term="python"></category><category term="taylortype"></category></entry><entry><title>Green/blue thing</title><link href="https://blog.kgz.sh/green-blue-thing" rel="alternate"></link><published>2010-04-04T21:24:00+01:00</published><updated>2010-04-04T21:24:00+01:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kgz.sh,2010-04-04:/green-blue-thing</id><content type="html">&lt;iframe
 src="//player.vimeo.com/video/9220323?loop=1&amp;title=0&amp;byline=0&amp;portrait=0"
 width="676" height="500" frameborder="0" webkitallowfullscreen
-mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;</content><category term="3d"></category><category term="3d"></category><category term="blender"></category><category term="images"></category></entry><entry><title>Some fur</title><link href="https://blog.kragniz.eu/some-fur" rel="alternate"></link><published>2009-11-30T18:14:00+00:00</published><updated>2009-11-30T18:14:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2009-11-30:/some-fur</id><content type="html">&lt;p&gt;Playing with fluffy things in blender.&lt;/p&gt;
-&lt;img alt="" src="https://blog.kragniz.eu/images/large-brute-beast-pic34.jpg" /&gt;
-&lt;img alt="" src="https://blog.kragniz.eu/images/large-brute-beast-pic35.jpg" /&gt;
-&lt;img alt="" src="https://blog.kragniz.eu/images/smallhairythingshot43.jpg" /&gt;
-&lt;img alt="" src="https://blog.kragniz.eu/images/smallhairythingshot53.jpg" /&gt;
-</content><category term="3d"></category><category term="3d"></category><category term="blender"></category><category term="images"></category></entry><entry><title>Low altitude flying craft</title><link href="https://blog.kragniz.eu/flying-thing" rel="alternate"></link><published>2009-04-02T14:46:00+01:00</published><updated>2009-04-02T14:46:00+01:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2009-04-02:/flying-thing</id><content type="html">&lt;img alt="" src="https://blog.kragniz.eu/images/rocket-thing-pic-10.jpg" /&gt;
-&lt;img alt="" src="https://blog.kragniz.eu/images/rocket-thing-pic-16.jpg" /&gt;
-&lt;img alt="" src="https://blog.kragniz.eu/images/rocket-thing-pic-19.jpg" /&gt;
+mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;</content><category term="3d"></category><category term="3d"></category><category term="blender"></category><category term="images"></category></entry><entry><title>Some fur</title><link href="https://blog.kgz.sh/some-fur" rel="alternate"></link><published>2009-11-30T18:14:00+00:00</published><updated>2009-11-30T18:14:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kgz.sh,2009-11-30:/some-fur</id><content type="html">&lt;p&gt;Playing with fluffy things in blender.&lt;/p&gt;
+&lt;img alt="" src="https://blog.kgz.sh/images/large-brute-beast-pic34.jpg" /&gt;
+&lt;img alt="" src="https://blog.kgz.sh/images/large-brute-beast-pic35.jpg" /&gt;
+&lt;img alt="" src="https://blog.kgz.sh/images/smallhairythingshot43.jpg" /&gt;
+&lt;img alt="" src="https://blog.kgz.sh/images/smallhairythingshot53.jpg" /&gt;
+</content><category term="3d"></category><category term="3d"></category><category term="blender"></category><category term="images"></category></entry><entry><title>Low altitude flying craft</title><link href="https://blog.kgz.sh/flying-thing" rel="alternate"></link><published>2009-04-02T14:46:00+01:00</published><updated>2009-04-02T14:46:00+01:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kgz.sh,2009-04-02:/flying-thing</id><content type="html">&lt;img alt="" src="https://blog.kgz.sh/images/rocket-thing-pic-10.jpg" /&gt;
+&lt;img alt="" src="https://blog.kgz.sh/images/rocket-thing-pic-16.jpg" /&gt;
+&lt;img alt="" src="https://blog.kgz.sh/images/rocket-thing-pic-19.jpg" /&gt;
 &lt;iframe
 src="//player.vimeo.com/video/9167617?loop=1&amp;title=0&amp;byline=0&amp;portrait=0"
 width="627" height="400" frameborder="0" webkitallowfullscreen
-mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;</content><category term="3d"></category><category term="3d"></category><category term="blender"></category><category term="images"></category></entry><entry><title>Hoop machine</title><link href="https://blog.kragniz.eu/hoop-machine" rel="alternate"></link><published>2009-01-28T22:04:00+00:00</published><updated>2009-01-28T22:04:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kragniz.eu,2009-01-28:/hoop-machine</id><content type="html">&lt;p&gt;Modeled in &lt;a class="reference external" href="http://www.blender.org/"&gt;Blender&lt;/a&gt; and rendered in Kerkythea.&lt;/p&gt;
-&lt;img alt="" src="https://blog.kragniz.eu/images/hoopmachine6.jpg" /&gt;
+mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;</content><category term="3d"></category><category term="3d"></category><category term="blender"></category><category term="images"></category></entry><entry><title>Hoop machine</title><link href="https://blog.kgz.sh/hoop-machine" rel="alternate"></link><published>2009-01-28T22:04:00+00:00</published><updated>2009-01-28T22:04:00+00:00</updated><author><name>Louis Taylor</name></author><id>tag:blog.kgz.sh,2009-01-28:/hoop-machine</id><content type="html">&lt;p&gt;Modeled in &lt;a class="reference external" href="http://www.blender.org/"&gt;Blender&lt;/a&gt; and rendered in Kerkythea.&lt;/p&gt;
+&lt;img alt="" src="https://blog.kgz.sh/images/hoopmachine6.jpg" /&gt;
 </content><category term="3d"></category><category term="3d"></category><category term="blender"></category><category term="images"></category></entry></feed>

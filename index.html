@@ -6,20 +6,21 @@
   <link rel="stylesheet/less" type="text/css" href="./theme/css/style.less">
   <script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
   -->
+  <link rel="stylesheet" type="text/css" href="./theme/fonts/inter.css">
   <link rel="stylesheet" type="text/css" href="./theme/css/style.css">
   <link rel="stylesheet" type="text/css" href="./theme/css/pygments.css">
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=PT+Sans|PT+Serif|PT+Mono">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=PT+Mono">
 
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="Louis Taylor">
   <meta name="description" content="Posts and writings by Louis Taylor">
 
-  <link href="https://blog.kragniz.eu/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="blog.kragniz.eu Atom" />
+  <link href="https://blog.kgz.sh/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="blog.kgz.sh Atom" />
 
 
   <title>
-    blog.kragniz.eu
+    blog.kgz.sh
   </title>
 
 </head>
@@ -28,7 +29,7 @@
   <aside>
     <div id="user_meta">
       <a href=".">
-        <img src="https://blog.kragniz.eu/images/me2_cropped.png" alt="logo">
+        <img src="/images/me2.png" alt="logo">
       </a>
       <h2><a href=".">Louis Taylor</a></h2>
       <p>ミ๏ｖ๏彡</p>
@@ -43,7 +44,211 @@
 
 <article>
   <div class="article_title">
+    <h3><a href="./fosdem-lightning-lightning-talks">Lightning Lightning Talks at FOSDEM 2025</a></h3>
+  </div>
+  <div class="article_meta">
+    <p>16 February 2025</p>
+  </div>
+  <div class="article_text">
+    <p>For the last few years I've been running the lightning talk track at
+<a class="reference external" href="https://fosdem.org">FOSDEM</a>.</p>
+<p>This track contains a series of 15 minute talks separated by 5 minute breaks
+all day, a format which has been mostly unchanged since its first <a class="reference external" href="https://archive.fosdem.org/2007/schedule/tracks/lightningtalks.html">introduction in
+2007</a>, 18
+years ago:</p>
+<a class="reference external image-reference" href="https://archive.fosdem.org/2007/schedule/tracks/lightningtalks.html">
+<img alt="Screenshot of FOSDEM 2007 lightning talk schedule" src="./images/2007-lightning-talks.png" />
+</a>
+<p>There are some advantages to this format:</p>
+<ul class="simple">
+<li>listing each talk in the schedule allows people to attend a single talk which interests them, then leave</li>
+<li>5 minute gaps between talks allow for more tolerance towards technical difficulties</li>
+<li>can be handled like any other talk in the program</li>
+</ul>
+<p>And some (subjective) disadvantages:</p>
+<ul class="simple">
+<li>different from what people would expect &quot;lightning talks&quot; to mean compared to other events</li>
+<li>15 minutes is actually quite a long time, and preparing a good talk of this length requires some effort</li>
+<li>more effort makes it harder to spontaneously prepare a talk, and riskier to accept a hastily prepared talk into the schedule</li>
+<li>some speakers prepare a talk which takes less than 15 minutes, so someone watching a series of talks might see 10 minutes of talk, followed by 10 minutes of gap before the next talk</li>
+</ul>
+<p>For better or for worse, the average talk length at FOSDEM has also been steadily decreasing over the years.
+If we extrapolate this trend into the future, talks in the current lightning
+talk track will at some point be longer than the average talk elsewhere!</p>
+<object data="./images/fosdem-talk-length.svg" type="image/svg+xml">Plot of year and average talk length</object>
+<p>This clearly makes the case for something which contains even more lightning
+than the usual lightning talks.</p>
+<p>For FOSDEM 2025, I wanted to make something with the following goals:</p>
+<ol class="arabic simple">
+<li>A single session with no downtime</li>
+<li>Felt spontaneous</li>
+<li>Entertaining to watch</li>
+<li>Low bar for entry</li>
+</ol>
+<p>Normally this kind of session at a conference would just be called &quot;lightning
+talks&quot;, but we already have the existing lightning talks track which wouldn't
+be changing this year.</p>
+<p>Since the main difference between them is the quantity of lightning involved, I named it
+Lightning Lightning Talks instead.</p>
+<div class="section" id="the-software">
+<h2>The software</h2>
+<p>To run this session, something needed to:</p>
+<ol class="arabic simple">
+<li>Let people submit talk proposals with slides attached</li>
+<li>Review and accept some talks</li>
+<li>On the day of the session, grab the slides for accepted talks</li>
+<li>Display a title screen to make sure the right speaker starts speaking</li>
+<li>Display presentation slides</li>
+<li>Count how long a speaker has left</li>
+<li>Move to the next talk once time has run out</li>
+</ol>
+<p>The first two points are covered by <a class="reference external" href="https://github.com/pretalx/pretalx">pretalx</a>, the tool used for all the normal
+proposal management at FOSDEM. The only complication was making it easy to get
+the list of accepted talks and the attached slides. This ended up being a new track in
+pretalx, and also a new proposal type to make filtering using the pretalx API
+possible.</p>
+<p>A tool could then be written to query the API for the data about talks and
+write an intermediate config file describing the required info for the upcoming
+session. Since there's a much higher chance of changes at the last minute (for
+example some speakers not turning up), keeping the info for the session in a
+format which could be quickly edited by hand was important. It also removes a
+hard dependency on our pretalx deployment, so the session can run even if
+pretalx is down for some reason.</p>
+<p>This file is a fairly unexciting <tt class="docutils literal">.json</tt> file, and looks about the same as you would expect:</p>
+<div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Zagreb City case study: How to foster open data with public money&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;speakers&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Aleksandar Gavrilovic&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;slides_url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://pretalx.fosdem.org/media/fosdem-2025/submissions/8NP3TN/resources/Zagreb_Ca_ryBYjbT.pdf&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;slides_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Zagreb_Ca_ryBYjbT.pdf&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;created&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-20T09:32:48.352004+01:00&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;A Card Game for you techies&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;speakers&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Thierry Berger&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;slides_url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://pretalx.fosdem.org/media/fosdem-2025/submissions/DXRMQC/resources/pitch_kln5nRa.pdf&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;slides_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pitch_kln5nRa.pdf&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;created&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-28T09:29:02.942777+01:00&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+</pre></div>
+<p>I wrote a custom presentation tool which reads this <tt class="docutils literal">.json</tt> and uses it to
+display a neat title screen for each talk followed by the slides provided by
+each speaker. This uses GTK for the main application and Pango + Cairo to
+render most of the graphics.</p>
+<p>To annoy everyone equally (except LaTeX users) I required slides in <tt class="docutils literal">.pdf</tt>
+format, which meant I needed to render pages from them for the main
+presentation content. For this I used Poppler <a class="footnote-reference" href="#footnote-1" id="footnote-reference-1">[1]</a>, which ended up being pretty
+easy to implement (except for spending a bit too long figuring out why a
+particular presentation wasn't rendering correctly before I found out pdf
+documents could be transparent and I was rendering on a black background).</p>
+<p>Most of the time developing this tool probably went into making the title
+screen look nice, with a pleasing ease in function (quint, <span class="formula">1 − (1 − <i>t</i>)<sup>5</sup></span>)
+animating the FOSDEM cog pulling the title on to the screen:</p>
+<video autoplay loop muted playsinline>
+  <source src="./images/lightninglightning-2025-02-09_15.09.38_1.webm" type="video/webm" />
+</video><p>A second window shows the time remaining for the current speaker, which can be displayed on a secondary monitor:</p>
+<video autoplay loop muted playsinline>
+  <source src="./images/lightninglightning-countdown-2025-02-09_15.12.14_1.webm" type="video/webm" />
+</video><p>To make sure speakers don't overstay their welcome on the stage, the system
+needs to move them on. For lightning talks elsewhere, this is often done with a
+separate timer and social pressure to stop. Since this custom presentation tool
+knows how long the current speaker has taken and the order of talks, it can
+immediately start the next talk once the time has run out.</p>
+<p>When the time left reaches 10 seconds, the countdown screen starts flashing in
+warning, while the presentation slides slowly fade out to the title screen and
+the next talk begins automatically:</p>
+<video autoplay loop muted playsinline>
+  <source src="./images/lightninglightning-countdown-move-to-next-2025-02-09_15.23.33_1.webm" type="video/webm" />
+</video><p>Code for this tool is available at <a class="reference external" href="https://github.com/kragniz/fosdem-lightning-talk-presenter">https://github.com/kragniz/fosdem-lightning-talk-presenter</a></p>
+<table class="docutils footnote" frame="void" id="footnote-1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-1">[1]</a></td><td>As luck would have it, there was a lightning talk at FOSDEM this year about Poppler: <a class="reference external" href="https://fosdem.org/2025/schedule/event/fosdem-2025-6000-poppler-the-pdf-rendering-library/">https://fosdem.org/2025/schedule/event/fosdem-2025-6000-poppler-the-pdf-rendering-library/</a></td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="people-logistics">
+<h2>People logistics</h2>
+<p>Despite planning the actual presentation display and submission system, I
+hadn't fully planned the logistics of people moving around until the evening
+before the session. This meant quickly working out a system to make sure
+speakers could smoothly flow from one talk to the next.</p>
+<p>With the help of some volunteers who were assisting with running the session on
+the day, we thought through a few options and settled with:</p>
+<ul class="simple">
+<li>Printing off the talk schedule, and giving a copy to each speaker just in case the order is forgotten</li>
+<li>Sitting speakers <tt class="docutils literal"><span class="pre">n-3</span></tt> in a row of audience seats in the same order as their position in the talk schedule</li>
+<li>Using two seats at the side of the stage as a staging area (#1 containing the next speaker, and #2 containing the speaker after next)</li>
+<li>Using two handheld microphones (one held by the current speaker, one held by the next speaker)</li>
+</ul>
+<p>On a talk ending, everybody swaps to a new position simultaneously:</p>
+<ol class="arabic simple">
+<li>Speaker leaves the stage, handing their microphone to the person in staging area seat #2</li>
+<li>Person in the #1 staging area seat takes to the stage and begins their talk</li>
+<li>Person in staging area seat #2 moves to seat #1</li>
+<li>Person in the rightmost seat in the audience row moves to staging area seat #2</li>
+<li>All other speakers sitting in the audience row move one seat to the right</li>
+</ol>
+<p>This ended up worked pretty smoothly. There was a contingency plan in case a
+speaker carried on talking after their time ran out involving a volunteer
+threateningly wielding a brush and sweeping them off the stage, which (somewhat
+unfortunately, since it would have been entertaining) never needed to be deployed.</p>
+</div>
+<div class="section" id="how-it-went">
+<h2>How it went</h2>
+<p>I was really pleased with how this worked out in the end. Running a session
+which relied on custom presentation software and a large number of speakers had
+the potential for some unforeseen disaster, which had made me a bit anxious. No
+disasters took place, and feedback has been nice.</p>
+<p>You can watch the recording here:</p>
+<a class="reference external image-reference" href="https://fosdem.org/2025/schedule/event/fosdem-2025-6674-lightning-lightning-talks/">
+<img alt="Screenshot of FOSDEM 2007 lightning talk schedule" src="./images/lightning-lightning-title.jpg" />
+</a>
+<p>The talks were good. Someone was enthusiastic about isopods:</p>
+<blockquote class="mastodon-embed" data-embed-url="https://chaos.social/@whatareyoudoinginmyswamp/113947154552710824/embed" style="background: #FCF8FF; border-radius: 8px; border: 1px solid #C9C4DA; margin: 0; max-width: 540px; min-width: 270px; overflow: hidden; padding: 0;"> <a href="https://chaos.social/@whatareyoudoinginmyswamp/113947154552710824" target="_blank" style="align-items: center; color: #1C1A25; display: flex; flex-direction: column; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Roboto, sans-serif; font-size: 14px; justify-content: center; letter-spacing: 0.25px; line-height: 20px; padding: 24px; text-decoration: none;"> <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 79 75"><path d="M74.7135 16.6043C73.6199 8.54587 66.5351 2.19527 58.1366 0.964691C56.7196 0.756754 51.351 0 38.9148 0H38.822C26.3824 0 23.7135 0.756754 22.2966 0.964691C14.1319 2.16118 6.67571 7.86752 4.86669 16.0214C3.99657 20.0369 3.90371 24.4888 4.06535 28.5726C4.29578 34.4289 4.34049 40.275 4.877 46.1075C5.24791 49.9817 5.89495 53.8251 6.81328 57.6088C8.53288 64.5968 15.4938 70.4122 22.3138 72.7848C29.6155 75.259 37.468 75.6697 44.9919 73.971C45.8196 73.7801 46.6381 73.5586 47.4475 73.3063C49.2737 72.7302 51.4164 72.086 52.9915 70.9542C53.0131 70.9384 53.0308 70.9178 53.0433 70.8942C53.0558 70.8706 53.0628 70.8445 53.0637 70.8179V65.1661C53.0634 65.1412 53.0574 65.1167 53.0462 65.0944C53.035 65.0721 53.0189 65.0525 52.9992 65.0371C52.9794 65.0218 52.9564 65.011 52.9318 65.0056C52.9073 65.0002 52.8819 65.0003 52.8574 65.0059C48.0369 66.1472 43.0971 66.7193 38.141 66.7103C29.6118 66.7103 27.3178 62.6981 26.6609 61.0278C26.1329 59.5842 25.7976 58.0784 25.6636 56.5486C25.6622 56.5229 25.667 56.4973 25.6775 56.4738C25.688 56.4502 25.7039 56.4295 25.724 56.4132C25.7441 56.397 25.7678 56.3856 25.7931 56.3801C25.8185 56.3746 25.8448 56.3751 25.8699 56.3816C30.6101 57.5151 35.4693 58.0873 40.3455 58.086C41.5183 58.086 42.6876 58.086 43.8604 58.0553C48.7647 57.919 53.9339 57.6701 58.7591 56.7361C58.8794 56.7123 58.9998 56.6918 59.103 56.6611C66.7139 55.2124 73.9569 50.665 74.6929 39.1501C74.7204 38.6967 74.7892 34.4016 74.7892 33.9312C74.7926 32.3325 75.3085 22.5901 74.7135 16.6043ZM62.9996 45.3371H54.9966V25.9069C54.9966 21.8163 53.277 19.7302 49.7793 19.7302C45.9343 19.7302 44.0083 22.1981 44.0083 27.0727V37.7082H36.0534V27.0727C36.0534 22.1981 34.124 19.7302 30.279 19.7302C26.8019 19.7302 25.0651 21.8163 25.0617 25.9069V45.3371H17.0656V25.3172C17.0656 21.2266 18.1191 17.9769 20.2262 15.568C22.3998 13.1648 25.2509 11.9308 28.7898 11.9308C32.8859 11.9308 35.9812 13.492 38.0447 16.6111L40.036 19.9245L42.0308 16.6111C44.0943 13.492 47.1896 11.9308 51.2788 11.9308C54.8143 11.9308 57.6654 13.1648 59.8459 15.568C61.9529 17.9746 63.0065 21.2243 63.0065 25.3172L62.9996 45.3371Z" fill="currentColor"/></svg> <div style="color: #787588; margin-top: 16px;">Post by @whatareyoudoinginmyswamp@chaos.social</div> <div style="font-weight: 500;">View on Mastodon</div> </a> </blockquote> <script data-allowed-prefixes="https://chaos.social/" async src="https://chaos.social/embed.js"></script></div>
+<div class="section" id="future">
+<h2>Future</h2>
+<p>I'd like to make some changes if we run something similar next time:</p>
+<ul class="simple">
+<li>I'd like to encourage more random and fun topics</li>
+<li>5 minutes is still quite a long time! In a 50 minute session we can only fit
+10 talks if everyone takes the maximum time. Maybe next time the limit could
+be 3 minutes.</li>
+<li>A bigger display showing the countdown visible from the audience would be nice</li>
+<li>Make sure no mouse cursor is drawn over slides</li>
+<li>The countdown should start as soon as the title screen is shown</li>
+<li>A remote control to skip to the next presentation would be good, some
+speakers forgot to complete their slides all the way to the end, so the next
+speaker needed to skip forward a bit awkwardly</li>
+<li>Shuffling all speakers one seat over was necessary because all the seats in
+this room have built in desks which make getting in and out of a row awkward
+unless you are sitting right at the end. Obtaining extra chairs to make an
+additional row of seats at the font would avoid needing to do this.</li>
+<li>The submission process needs to be smoother. The extra track and submission
+type was confusing in the pretalx UI.</li>
+<li>The submission deadline and status needs to be communicated better. I was
+originally worried about not getting enough proposals, but ended up getting
+too many. I closed submissions early since I didn't want people to spend time
+working on a presentation if all the spaces were taken, but this (quite
+rightfully) annoyed some people since they thought there would still be time
+to submit a talk</li>
+</ul>
+<p>I originally wanted to make talk order random out of a pool of people who
+registered as speakers before the session begins. However this felt a bit too
+risky for a first try. Perhaps some element of this could be introduced next
+time?</p>
+<p>Hopefully Lightning Lightning Talks will return next time (maybe with a name change)!</p>
+</div>
+
+  </div>
+</article>
+<hr />
+<article>
+  <div class="article_title">
     <h3><a href="./raspbian-on-travis-ci">Raspbian on Travis CI</a></h3>
+  </div>
+  <div class="article_meta">
+    <p>22 January 2016</p>
   </div>
   <div class="article_text">
     <p>For abersailbot, I've been working on automation of provisioning images to run
@@ -257,6 +462,9 @@ puppet against it and you're done. Happy testing!</p>
   <div class="article_title">
     <h3><a href="./kpatch-package-builder">kpatch-package-builder 0.1.0</a></h3>
   </div>
+  <div class="article_meta">
+    <p>29 June 2015</p>
+  </div>
   <div class="article_text">
     <p>As part of <a class="reference external" href="https://developers.google.com/open-source/gsoc/">Google Summer of Code</a>, I've been working with the
 CentOS project to create a delivery and build system to provide easy and
@@ -372,6 +580,9 @@ of packages for particular kernels.</p>
   <div class="article_title">
     <h3><a href="./vagrant-fedora-21">Vagrant on fedora 21 and later</a></h3>
   </div>
+  <div class="article_meta">
+    <p>10 May 2015</p>
+  </div>
   <div class="article_text">
     <p>Vagrant is <a class="reference external" href="https://bugzilla.redhat.com/show_bug.cgi?id=1020456">now packaged</a> in Fedora 21 and later versions, which is great news.
 No more messing around with the horror of rvm!</p>
@@ -402,21 +613,6 @@ $ rvm implode
 </pre>
 <p>and everything will be happy, where happy is defined by vagrant running and
 having the fewest versions of ruby installed.</p>
-
-  </div>
-</article>
-<hr />
-<article>
-  <div class="article_title">
-    <h3><a href="./interlude">A brief five year interlude</a></h3>
-  </div>
-  <div class="article_text">
-    <p>I've since done my GCSE and A-level exams, and am now half way
-through university.</p>
-<p>Some sailing robots made with friends from my university:</p>
-<img alt="" src="./images/dewi.jpg" />
-<img alt="" src="./images/kitty.jpg" />
-<p>Old posts begin here:</p>
 
   </div>
 </article>
